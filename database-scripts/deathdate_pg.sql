@@ -7,10 +7,15 @@
 create schema if not exists esbdeath;
 
 -- Delete user
+revoke all on database registries from role_esb_death;
+revoke all on schema esbdeath from role_esb_death;
+revoke all on all tables in schema esbdeath from role_esb_death;
+revoke all on all sequences in schema esbdeath from role_esb_death;
+drop owned by role_esb_death;
 drop role if exists role_esb_death;
 
 -- Create the user role_esb_death
-create user role_esb_death superuser;
+create user role_esb_death;
 
 -- Set the schema in the search path for the user
 alter role role_esb_death in database registries set search_path to esbdeath;
@@ -44,3 +49,14 @@ alter table event_message add constraint fk_event_message_transaction_event_id f
 create sequence affctd_prty_affctd_prty_id_seq increment by 50 start with 50;
 create sequence xn_evnt_xn_evnt_id_seq increment by 50 start with 50;
 create sequence event_msg_event_msg_id_seq increment by 50 start with 50;
+
+-- Grant ownership of sequences
+alter sequence affctd_prty_affctd_prty_id_seq owner to role_esb_death;
+alter sequence xn_evnt_xn_evnt_id_seq owner to role_esb_death;
+alter sequence event_msg_event_msg_id_seq owner to role_esb_death;
+
+-- Grant permissions to the role
+grant connect on database registries to role_esb_death;
+grant usage on schema esbdeath to role_esb_death;
+grant select, insert, update, delete on all tables in schema esbdeath to role_esb_death;
+grant select, update, usage on all sequences in schema esbdeath to role_esb_death;

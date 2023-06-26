@@ -1,6 +1,9 @@
+# Config files for each environment and key files
 config
-DeathDate-war/src/main/resources
-DeathDate-war/src/main/webapp/WEB-INF
+
+# Test cases and other resources for testing
 DeathDate-war/src/test
+
+# Folders that the project compiles too
 DeathDate-war/target
 ESB-common/target

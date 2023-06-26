@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://camel.apache.org/schema/spring
+           http://camel.apache.org/schema/spring/camel-spring.xsd
+           http://www.springframework.org/schema/jee 
+           http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+    <import resource="classpath:deathEnvironmentSpecific.xml"/>
+    
+    <sslContextParameters id="sslParameters" xmlns="http://camel.apache.org/schema/spring">
+        <keyManagers
+            keyPassword="{{sslPassword}}">
+            <keyStore
+                resource="keys.jks"
+                password="{{sslKeyPassword}}"/>
+        </keyManagers>
+        <trustManagers>
+            <keyStore 
+                resource="trust.jks"
+                password="{{sslTrustPassword}}"/>
+        </trustManagers>
+    </sslContextParameters>
+
+    <context:component-scan base-package="ca.bc.gov.moh" />
+    <camelContext xmlns="http://camel.apache.org/schema/spring" handleFault="true" >
+        <contextScan />
+        <jmxAgent id="agent" createConnector="true" serviceUrlPath="deathdate-jmx"/>
+    </camelContext>
+
+    <!-- Dev environment configuration. Prevents the server from taking minutes to shutdown if messages are "stuck" -->
+    <bean id="shutdown" class="org.apache.camel.impl.DefaultShutdownStrategy"> 
+        <property name="timeout" value="5"/>
+    </bean>
+
+    <bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
+        <property name="showBody" value="false"/>
+        <property name="showHeaders" value="false"/>
+    </bean>
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >
+        <property name="persistenceProviderClass" value="org.eclipse.persistence.jpa.PersistenceProvider"/>
+        <property name="packagesToScan" value="ca.bc.gov.moh.esb.util.audit.entity,org.apache.camel.processor.idempotent.jpa" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
+                <property name="showSql" value="false"/>
+                <property name="generateDdl" value="true"/>
+                <property name="databasePlatform" value="org.eclipse.persistence.platform.database.PostgreSQLPlatform" />
+            </bean>
+        </property>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect" />
+        </property>
+        <property name="loadTimeWeaver">
+            <bean class="org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver" />
+        </property>  
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <tx:annotation-driven />
+
+    <bean id="persistenceExceptionTranslationPostProcessor"
+      class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+    
+    <!-- Define the JPA-based idempotent repository to use in the file consumer. -->
+    <!-- Note that we set LocalContainerEntityManagerFactoryBean.packagesToScan=...idempotent.jpa above. -->
+    <bean id="jpaStore" class="org.apache.camel.processor.idempotent.jpa.JpaMessageIdRepository">
+        <constructor-arg index="0" ref="entityManagerFactory"/>
+        <!-- Arbitrary name for the repo. -->
+        <constructor-arg index="1" value="FileConsumer"/>
+    </bean>
+
+    <!-- JMS queue connection factory and destination resolver -->
+    <bean id="jmsDestinationResolver" class="org.springframework.jms.support.destination.JndiDestinationResolver"/>
+
+    <!-- Spring JMS transaction policy and manager -->
+    <bean id="jmsTransactionPolicy" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED"/>
+    </bean>
+    <bean id="jmsTransactionManager" class="org.springframework.transaction.jta.JtaTransactionManager"/>
+    
+</beans>
+

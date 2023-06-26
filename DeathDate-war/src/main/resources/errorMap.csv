@@ -1,0 +1,44 @@
+V3 Error Code,V3 Error Text,Error Summary (In EA),ESB Behavior
+BCHCIM.RP.0.0000,Transaction processed.A new PHN was assigned.,MSG-0378 Transaction processed.A new PHN was assigned.,Do not Retry
+BCHCIM.RP.0.0001,"The Revise Person Request has been processed, and an existing PHN was found.","MSG-0379 The Revise Person Request has been processed, and an existing PHN was found.",Do not Retry
+BCHCIM.RP.0.0002,"Warning: The Revise Person Request has been processed, but an ambiguity exists in the EMPI.  No PHN was assigned. Once resolved by EMPI Admin. the PHN will be assigned and distributed.","MSG-0380 Revise Person processed, but an ambiguity exists in the EMPI.",Do not Retry
+BCHCIM.RP.0.0007,The Revise Person request has been accepted for processing.,MSG-0381 The Revise Person request has been accepted for processing.,Do not Retry
+BCHCIM.RP.0.0021,"The Revise Person Request has been processed, and a matched CRS member was found.","MSG-0377 The Revise Person Request has been processed, and a matched CRS member was found.",Do not Retry
+BCHCIM.RP.0.0030,The Revised Person Request has been processed successfully.  HCIM business logic automatically verified the newborn name update,MSG-0511 The Revised Person Request has been processed. The overlay that was created by EMPI for this newborn name update message was automatically resolved by HCIM,Do not Retry
+BCHCIM.RP.1.0002,"Warning: The Revise Person Request has been processed, but an ambiguity exists in the EMPI. No PHN was assigned. Once resolved by EMPI Admin. the PHN will be assigned and distributed.","MSG-0382 Revise Person processed, but an ambiguity exists in the EMPI.",Do not Retry
+BCHCIM.RP.1.0003,"Warning: The Revise Person Request has been processed, but the CRS has rejected some of the data. EMPI Administration staff have been alerted, therefore no action required.","MSG-0383 The Revise Person Request has been processed, but the CRS has rejected some of the data.",Do not Retry
+BCHCIM.RP.1.0017,The Revise Person request address values have been modified to filter out invalid characters.,MSG-0321 The Revise Person request address values have been modified to filter out invalid characters.,Do not Retry
+BCHCIM.RP.1.0022,Warning: CRS Rejected the Mothers PHN. A new PHN was not assigned.,MSG-0327 CRS Rejected the Mothers PHN. A new PHN was not assigned.,Do not Retry
+BCHCIM.RP.1.0023,Warning: The supplied Mothers PHN was the non-survivor of a merge.  The Active PHN was retreived and used.,MSG-0347 The supplied Mothers PHN was the non-survivor of a merge. The Active PHN was retreived and used.,Do not Retry
+BCHCIM.RP.1.0031,The Revised Person Request has been rejected.The record failed to link to the PHN.,MSG-0505 The Revised Person Request has been rejected. The record failed to link to the PHN,Do not Retry
+BCHCIM.RP.1.0502,"Warning: the Revise Person request successfully completed, however the record is the subject of a Potential Duplicates task.",MSG-0500 PHN Bound subject of Potential Duplicate task,Do not Retry
+BCHCIM.RP.1.0503,"Warning: the Revise Person request successfully completed, however the record is the subject of a Potential Overlay task.",MSG-0501 Revise Person Created Overlay,Do not Retry
+BCHCIM.RP.1.0504,"Warning: the Revise Person request successfully completed, however the record is the subject of a Potential Linkage task.","MSG-0502 Revise Person Completed, subject of Potential Linkage task",Do not Retry
+BCHCIM.RP.1.0505,"Warning: the Revise Person request successfully completed, however the record is the subject of a Review Identifiers task.","MSG-0503 Revise Person Completed, subject of Review Identifier task",Do not Retry
+BCHCIM.RP.1.0523,"Warning: The Revised Person has completed successfully, however the EMPI failed to assign a PHN.","MSG-0523 Revise Person PHN Bound, PHN Not Assigned",Do not Retry
+BCHCIM.RP.1.0529,Warning: The supplied address was auto-corrected by address validation. ,MSG-0529 Address Auto-Corrected,Do not Retry
+BCHCIM.RP.1.0532,"Warning: The supplied address was determined to be invalid, and unable to be auto-corrected by address validation.",MSG-0532 Address Validation Failed ,Do not Retry
+BCHCIM.RP.2.0002,"Error:  The subject of the transaction has an invalid PHN.  Please check the PHN, and try again.",MSG-0325 Iinvalid PHN,Do not Retry
+BCHCIM.RP.2.0003,"Error: The Revise Person Request has been processed, but the CRS has rejected all of the data. EMPI Administration staff have been alerted, therefore no action is required.","MSG-0384 The Revise Person Request has been processed, but the CRS has rejected all of the data",Do not Retry
+BCHCIM.RP.2.0004,Error: The EMPI is unavailable. Please report the problem to the helpdesk.,MSG-0385 The EMPI is unavailable. Please report the problem to the helpdesk.,Retry
+BCHCIM.RP.2.0005,Error: A technical error has occurred. Please report the problem to the helpdesk.,MSG-0387 A technical error has occurred. (Revise Person),Retry
+BCHCIM.RP.2.0006,"Error: The HL7 message is invalid. Please correct the HL7 message, and resubmit it.","MSG-0388 The HL7 message is invalid. Please correct the HL7 message, and resubmit it.",Do not Retry
+BCHCIM.RP.2.0007,Error: CRS has rejected the data.  Another Newborn record with the same demographic information has been found,,Do not Retry
+BCHCIM.RP.2.0012,"Error: The subject of the transaction is currently involved in a potential overlay task, and cannot be updated until the task is resolved. Resolve the Potential Overlay task, and try again.",MSG-0390 Potential Overlay Task,Do not Retry
+BCHCIM.RP.2.0015,"Error: The subject of the transaction has previously been merged, and cannot be updated. Apply the update to the merge survivor instead.","MSG-0391 The subject of the transaction has previously been merged, and cannot be updated. Apply the update to the merge survivor instead.",Do not Retry
+BCHCIM.RP.2.0016,Error: The subject of the transaction is deceased as verified by BC Vital Statistics.,MSG-0394 The subject of the transaction is deceased as verified by BC Vital Statistics.,Do not Retry
+BCHCIM.RP.2.0020,Error: The subject of the transaction is logically deleted.,MSG-0374 The subject of the transaction is logically deleted.,Do not Retry
+BCHCIM.RP.2.0022,Warning: CRS Rejected the Mothers PHN. A new PHN was not assigned.,MSG-0343 Warning: CRS Rejected the Mothers PHN. A new PHN was not assigned.,Do not Retry
+BCHCIM.RP.2.0024,Failed to Process PHN Bound Source with invalid PHN.,MSG-0332 Failed to Process PHN Bound Source with invalid PHN.,Do not Retry
+BCHCIM.RP.2.0025,Source Record Identifier was not supplied,MSG-0366 Source Record Identifier was not supplied,Do not Retry
+BCHCIM.RP.2.0026,Failed to validate Secure PHN. Data was not in valid format.,MSG-0364 Failed to validate Secure PHN. Data was not in valid format.,Do not Retry
+BCHCIM.RP.2.0027 ,Error BCHCIM.RP.2.0027. The EMPI contains active SSRIs that were not supplied in the revise person message. The Revise Person request was not processed.,MSG-0358 The EMPI contains active SSRIs that were not supplied in the revise person message. The Revise Person request was not processed.,Do not Retry
+BCHCIM.RP.2.0028,Error BCHCIM.RP.2.0028. Duplicate SSRIs were found in the Revise Person message. The Revise Person request was not processed.,,Do not Retry
+BCHCIM.RP.2.0029,"Warning: The Person Revise request has completed successfully, but HCIM failed to delete one or more SSRIs in the message from other members.",,Do not Retry
+BCHCIM.RP.2.0031,The Revised Person Request has been rejected.The record failed to link to the PHN.,MSG-0506 The Revised Person Request has been rejected. The record failed to link to the PHN,Do not Retry
+BCHCIM.RP.2.0032,The Revised Person request has been identified as a duplicate message. The original request with the same message id has already been accepted for processing.,MSG-0509 The Revised Person request has been identified as a duplicate message. The original request with the same message id has already been accepted for processing,Do not Retry
+BCHCIM.RP.2.0035,Date of death before the Date of Birth. Please check the Date of Death and try again.,,Do not Retry
+BCHCIM.RP.2.0504,"Warning: The Revised Person has completed successfully, however the EMPI failed to assign a PHN.","MSG-0508 The Revised Person Request has been rejected. Revise Person PHN Bound, PHN Not assigned.",Do not Retry
+BCHCIM.RP.2.0523 ,"Error: The Revised Person has completed successfully, however the EMPI failed to assign a PHN.",,Do not Retry
+BCHCIM.RP.2.0524 ,Error: A duplicate SSRI Failed to be removed from a member in the EMPI.,,Do not Retry
+BCHCIM.RP.2.0534,"Error: A newborn message must contain either the MUM's PHN for a newborn add, or the purported PHN once a PHN has been assigned to the newborn.  A message cannot contain both the MUM's PHN and the newborn's PHN.",,Do not Retry

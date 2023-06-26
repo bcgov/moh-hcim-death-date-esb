@@ -30,7 +30,7 @@ The app is also configured to check the ftp server for files at times determined
 
 ### Database setup
 
-To set up the application's database, run `deathdate_pg.sql` in a new database named `registries`. The script will handle the creation of the required user and schema, so there is very little manual setup required. It will create the database with a user called "role_esb_death" with full priviliges (change these privileges later). Then you need to add a password for the user; you can do this either with the `\password {user}` command in a psql terminal which will prompt you for a password, or you can modify the `create user role_esb_death` line in `deathdate_pg.sql` to end with `password {password}`.
+To set up the application's database, run `deathdate_pg.sql` in a new database named `registries`. The script will create a user called "role_esb_death" with superuser priviliges (change these privileges later) and all of the tables and sequences required by the application. Then you need to add a password for the user; you can do this either with the `\password role_esb_death` command in a psql terminal, or you can modify the `create user role_esb_death superuser` line in `deathdate_pg.sql` to end with `password {password}`.
 
 ## Setting Up an ActiveMQ Broker
 

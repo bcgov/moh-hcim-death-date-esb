@@ -1,0 +1,10 @@
+PHNPHNPHN0SMITHS                                            JOHNJOH                  SECN                                              M1976-06-082004-02-01
+PHNPHNPHN1SMITHS                                            JOHNJ                    SECN                                              F1951-02-262004-02-02
+PHNPHNPHN2SMITHS                                            JOHNJO                   SECNDSE                                           M1958-09-052004-01-31
+PHNPHNPHN3SMI                                               JOHNJ                    SEC                      THIR                     F1946-01-071997-12-08
+PHNPHNPHN4SMITHSMI                                          JOHNJOH                  SECN                                              M1943-03-071997-12-08
+PHNPHNPHN5SM                                                JOH                                                                        M1912-09-181997-12-03
+PHNPHNPHN6SMI                                               JOHNJO                                                                     F1930-11-011997-12-06
+PHNPHNPHN7SMITHSM                                           JOHNJO                   SECN                                              F1911-07-191997-12-04
+PHNPHNPHN8SMITHSM                                           JOHNJO                   SECNDSEC                                          M1940-04-232004-02-20
+PHNPHNPHN9SMITHS                                            JOHNJ                    SECNDSE                  THIRDTHI                 M1990-05-061997-12-06

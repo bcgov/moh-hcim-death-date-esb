@@ -1,9 +1,9 @@
-# Config files for each environment and key files
+# Config files and key files for each environment
 config
 
-# Test cases and other resources for testing
-DeathDate-war/src/test
+# XML files for web app
+DeathDate-war/src/main/webapp/WEB-INF
 
-# Folders that the project compiles too
+# Folders that the project compiles into
 DeathDate-war/target
 ESB-common/target

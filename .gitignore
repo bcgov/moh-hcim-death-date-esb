@@ -1,0 +1,6 @@
+config
+DeathDate-war/src/main/resources
+DeathDate-war/src/main/webapp/WEB-INF
+DeathDate-war/src/test
+DeathDate-war/target
+ESB-common/target

@@ -11,7 +11,6 @@ import ca.bc.gov.moh.death.entity.Person;
 import ca.bc.gov.moh.death.entity.RequestMessage;
 import ca.bc.gov.moh.esb.util.audit.AuditableResponse;
 import ca.bc.gov.moh.esb.util.audit.AuditableResponseMessage;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +20,7 @@ import javax.validation.Valid;
  *
  * @author Patrick.Weckermann
  */
-public class RevisePerson extends RequestMessage implements EventMessage, Serializable, AuditableResponse {
+public class RevisePerson extends RequestMessage implements EventMessage, AuditableResponse {
     
     private static final long serialVersionUID = 7526472295622776147L;
     

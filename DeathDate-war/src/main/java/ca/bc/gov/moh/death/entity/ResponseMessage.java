@@ -1,10 +1,8 @@
 package ca.bc.gov.moh.death.entity;
 
-import ca.bc.gov.moh.esb.util.audit.AffectedParties;
 import ca.bc.gov.moh.esb.util.audit.AuditableParty;
 import ca.bc.gov.moh.esb.util.audit.AuditableResponse;
 import ca.bc.gov.moh.esb.util.audit.AuditableResponseMessage;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
@@ -17,7 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
  * @version 1.0
  * @created 26-Aug-2014 2:49:34 PM
  */
-public abstract class ResponseMessage extends Message implements Serializable, AuditableResponse, AffectedParties {
+public abstract class ResponseMessage extends Message implements AuditableResponse {
 
     private static final long serialVersionUID = 7526472295622776147L;
 

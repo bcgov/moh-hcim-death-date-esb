@@ -18,7 +18,6 @@
 package ca.bc.gov.moh.death.processor;
 
 import static ca.bc.gov.moh.death.processor.audit.DeathDateAuditProcessor.TRANSACTION_ID_HEADER_KEY;
-import static ca.bc.gov.moh.death.service.InboundRouteBuilder.JMS_CORRELATION_ID;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

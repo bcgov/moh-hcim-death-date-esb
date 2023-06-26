@@ -1,7 +1,5 @@
 package ca.bc.gov.moh.death.entity;
 
-import java.io.Serializable;
-
 /**
  * An email address
  *
@@ -9,7 +7,7 @@ import java.io.Serializable;
  * @version 1.0
  * @created 26-Aug-2014 2:49:32 PM
  */
-public class EmailAttribute extends Attribute implements Serializable {
+public class EmailAttribute extends Attribute {
 
     private static final long serialVersionUID = 7526472295622776147L;
 

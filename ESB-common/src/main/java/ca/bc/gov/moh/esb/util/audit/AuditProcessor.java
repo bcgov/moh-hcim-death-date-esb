@@ -20,7 +20,6 @@ package ca.bc.gov.moh.esb.util.audit;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Handles persistence for ESB database audits.

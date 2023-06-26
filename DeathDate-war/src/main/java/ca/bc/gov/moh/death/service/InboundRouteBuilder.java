@@ -36,8 +36,6 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
     @Value("${hcimRevisePersonEndPointURI}")
     private String hcimRevisePersonEndPointURI;
 
-    private String deleteAfterReading;
-
     @Value("${autocreateFolders}")
     private String autocreateFolders;
 
@@ -151,7 +149,6 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
         redeliveryDelay = Integer.parseInt(appProperties.getProperty("redeliveryDelay"));
         hcimTimeout = Integer.parseInt(appProperties.getProperty("hcimTimeout"));
 
-        deleteAfterReading = ftpProperties.getProperty("deleteAfterReading");
         autocreateFolders = ftpProperties.getProperty("autocreateFolders");
         filePath = ftpProperties.getProperty("filePath");
         moveToPath = ftpProperties.getProperty("moveToPath");

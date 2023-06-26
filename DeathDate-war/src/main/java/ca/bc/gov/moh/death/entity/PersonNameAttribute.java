@@ -1,7 +1,5 @@
 package ca.bc.gov.moh.death.entity;
 
-import java.io.Serializable;
-
 /**
  * Stores the various name information about a person
  *
@@ -9,7 +7,7 @@ import java.io.Serializable;
  * @version 1.0
  * @created 26-Aug-2014 2:49:33 PM
  */
-public class PersonNameAttribute extends Attribute implements Serializable {
+public class PersonNameAttribute extends Attribute {
 
     private static final long serialVersionUID = 7526472295622776147L;
 

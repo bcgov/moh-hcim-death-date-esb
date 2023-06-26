@@ -1,6 +1,5 @@
 package ca.bc.gov.moh.death.entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
  * @version 1.0
  * @created 26-Aug-2014 2:49:31 PM
  */
-public class AddressAttribute extends Attribute implements Serializable {
+public class AddressAttribute extends Attribute {
 
     private static final long serialVersionUID = 7526472295622776147L;
 

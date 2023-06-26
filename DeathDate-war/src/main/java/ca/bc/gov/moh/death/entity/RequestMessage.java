@@ -1,7 +1,5 @@
 package ca.bc.gov.moh.death.entity;
 
-import java.io.Serializable;
-
 /**
  * A request or input message with input/parameter data needed for processing of
  * the requested action.
@@ -10,7 +8,7 @@ import java.io.Serializable;
  * @version 1.0
  * @created 26-Aug-2014 2:49:34 PM
  */
-public abstract class RequestMessage extends Message implements Serializable {
+public abstract class RequestMessage extends Message {
 
     private static final long serialVersionUID = 7526472295622776147L;
 

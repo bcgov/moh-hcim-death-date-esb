@@ -1,14 +1,12 @@
 package ca.bc.gov.moh.death.entity;
 
-import java.io.Serializable;
-
 /**
  * a relationship between two people, and the nature (type) of relationship.
  * @author patrick.weckermann
  * @version 1.0
  * @created 26-Aug-2014 2:49:34 PM
  */
-public class PersonRelationship extends Attribute implements Serializable {
+public class PersonRelationship extends Attribute {
 
     private static final long serialVersionUID = 7526472295622776147L;
     

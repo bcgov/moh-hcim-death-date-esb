@@ -7,8 +7,20 @@ Welcome to the code repository for the HCIM DeathDate ESB App.
 ## Running the App in Docker on a Local Machine
 
 Prerequisites:
+
 - You have an ActiveMQ JMS broker running and listening for tcp requests on port 61616
-  - If you don't, see [Setting Up an ActiveMQ Broker](#Setting Up an ActiveMQ Broker).
+
+  - See [Setting Up an ActiveMQ Broker](#setting-up-an-activemq-broker)
+
+- You have created and configured a Postgres database
+
+  - See [Database Setup](#database-setup)
+
+- You have copies of the configuration files not included in this GitHub repository
+
+  - You will need the folder `config/local` (and its contents) and the file `local.env`
+
+  - Ensure that all of the passwords are set in `local.env`
 
 To run the app in docker on a local machine, build the Docker image from the provided Dockerfile.
 
@@ -28,9 +40,9 @@ To make sure the app is running, visit `http://localhost:8080/DeathDate`. You sh
 
 The app is also configured to check the ftp server for files at times determined by the SCHEDULER_CRON environment variable (note that this cron syntax includes a "seconds" field in the leftmost position in addition to all of the regular fields). Check the logs for output at the appropriate times and ensure that there are no errors. The program should grab the file, log some information in the database, and delete the file.
 
-### Database setup
+## Database Setup
 
-To set up the application's database, run `deathdate_pg.sql` in a new database named `registries`. The script will create a user called "role_esb_death" with superuser priviliges (change these privileges later) and all of the tables and sequences required by the application. Then you need to add a password for the user; you can do this either with the `\password role_esb_death` command in a psql terminal, or you can modify the `create user role_esb_death superuser` line in `deathdate_pg.sql` to end with `password {password}`.
+To set up the application's database, run `deathdate_pg.sql` in a new Postgres database named `registries`. The script will create a user called "role_esb_death" and all of the tables and sequences required by the application. Then you need to add a password for the user; you can do this either with the psql command `\password role_esb_death`, or you can modify the `create user role_esb_death superuser` line in `deathdate_pg.sql` to end with `password {password}`.
 
 ## Setting Up an ActiveMQ Broker
 
@@ -38,11 +50,15 @@ The app uses an ActiveMQ JMS broker. To set one up, first download [ActiveMQ 5](
 
 If the activemq console is working, you can create a new broker with `activemq create {path-to-broker}`. This will create the default broker in the designated directory. You can then start the broker with `activemq start xbean:file:{path-to-broker}/conf/activemq.xml`. This will start the broker from the configuration given in `activemq.xml`.
 
+The broker should start up and print some logs in the terminal window. To stop it, press Ctrl+C. If the broker fails to start up, it may be because one or more of the ports it is trying to use are already occupied. Make sure you are not already running a broker in another terminal. If you aren't, you can either try to find out which apps are using the ports and stop them, or you can change the ports in `conf/activemq.xml` and try to start it up again. Make sure to update the port in your `local.env` file to reflect the change.
+
+If you are trying to discover the app that is using the ports and you cannot find it, it may be because some of the ports are in the ephemeral port range. On this range, apps and system services can freely use ports without reporting their usage. If this is the case, you can likely fix the issue by restarting your computer. If that is impossible and you cannot change the ports in the configuration file, you'll have to explore alternative solutions.
+
 You can verify that the broker is running by accessing http://localhost:8161 in a web browser. After logging in with default credentials `username=admin password=admin` You should see a simple page showing "Welcome to the Apache ActiveMQ!".
 
 ## Code Organization
 
-This project uses the JavaTM Architecture for XML Binding (JAXB) Reference Implementation, which automatically generates files in DeathDate-war/src/main/java/org/hl7/v3. Some of these files contain the following header:
+This project uses Java Architecture for XML Binding (JAXB), which automatically generates files in DeathDate-war/src/main/java/org/hl7/v3. Some of these files contain the following header:
 
 ```java
 //

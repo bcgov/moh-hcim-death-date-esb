@@ -109,13 +109,6 @@
             <version>${camel-version}</version>
         </dependency>
 
-        <!-- Imported for org.springframework.web.context.ContextLoaderListener so that applicationContext.xml is loaded -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-
         <!-- Imported for org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean so that entityManagerFactory can be created -->
         <dependency>
             <groupId>org.springframework</groupId>

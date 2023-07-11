@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-3.2.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                           http://camel.apache.org/schema/spring
+                           http://camel.apache.org/schema/spring/camel-spring.xsd
+                           http://www.springframework.org/schema/jee
+                           http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+    <jee:jndi-lookup id="dataSource" jndi-name="java:app/jdbc/esbAudit" resource-ref="true"/>
+
+    <bean id="appProps" class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
+        <property name="propertiesArray">
+            <list>
+                <jee:jndi-lookup id="ftpProperties" jndi-name="java:app/death/ftp_properties" resource-ref="true"/>
+                <jee:jndi-lookup id="applicationProperties" jndi-name="java:app/death/application_properties" resource-ref="true"/>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+
+    <bean class="org.apache.activemq.pool.PooledConnectionFactory" id="deathHd2QueueFactory">
+        <property name="connectionFactory" ref="jmsConnectionFactory" />
+    </bean>
+
+    <bean id="jmsConnectionFactory"
+          class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${JMS_BROKER_URL}" />
+        <!-- the below property must be set to true, since we are sending object messages, for security reason client needs to
+        trust the objects being desrializaed from Active MQ. Acive MQ server also needs to be started wtih system property
+        -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=* -->
+        <property name="trustAllPackages" value="true" />
+    </bean>
+
+    <bean id="batchRecordQueueFactoryProxy" class="org.springframework.jms.connection.TransactionAwareConnectionFactoryProxy">
+        <property name="targetConnectionFactory" ref="deathHd2QueueFactory"/>
+    </bean>
+
+     <!--Camel queue configurations-->
+    <bean id="jmsBatchRecordQueueConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="batchRecordQueueFactoryProxy"/>
+        <!--this line below is causing problem in payara micro but needs to be uncommented for payara full -->
+        <!--<property name="destinationResolver" ref="jmsDestinationResolver"/>-->
+        <property name="transacted" value="true"/>
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+    </bean>
+
+     <!--Camel queue component-->
+    <bean id="deathHd2Queue" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration" ref="jmsBatchRecordQueueConfig"/>
+    </bean>
+
+</beans>

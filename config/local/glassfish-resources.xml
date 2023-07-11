@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+
+    <jdbc-connection-pool is-isolation-level-guaranteed="false" datasource-classname="org.postgresql.ds.PGConnectionPoolDataSource"
+                          name="DeathDatePool"  res-type="javax.sql.ConnectionPoolDataSource">
+        <property name="URL" value="${ENV=PG_URL}" />
+        <property name="driverClass" value="org.postgresql.Driver" />
+        <property name="User" value="${ENV=PG_USER}" />
+        <property name="Password" value="${ENV=PG_PASSWORD}" />
+        <!--<property name="CurrentSchema" value="${ESB_DEATH_SCHEMA}" />-->
+        <!--below property is not having any impact on the driver.-->
+        <property name="defaultAutoCommit" value="false" />
+     </jdbc-connection-pool>
+
+    <jdbc-resource pool-name="DeathDatePool" jndi-name="jdbc/esbAudit" />
+
+    <custom-resource factory-class="org.glassfish.resources.custom.factory.PropertiesFactory" res-type="java.util.Properties" jndi-name="death/application_properties">
+        <!-- note that the & in the URL is XML encoded -->
+        <property name="hcimRevisePersonEndPointURI" value="${HCIM_REVISED_PERSON_ENDPOINT}" />
+        <property name="sslPassword" value="${HCIM_SSL_PWD}" />
+        <property name="sslKeyPassword" value="${HCIM_SSL_KEY_PWD}" />
+        <property name="sslTrustPassword" value="${HCIM_SSL_TRUST_PWD}" />
+        <property name="maximumRedeliveries" value="4" />
+        <property name="redeliveryDelay" value="5000" />
+        <property name="hcimTimeout" value="30" />
+        <property name="senderSystem" value="MOH_VSA" />
+        <property name="senderOrg" value="MOH_VSA" />
+        <property name="userId" value="BatchDeath" />
+        <property name="fileDropPath" value="${HCIM_FILE_DROP_PATH}" /> <!-- MUST include "/" at the end -->
+        <property name="archivePath" value="${HCIM_FILE_ARCHIVE_PATH}" />
+        <property name="healthCheck" value="false" />
+        <!-- <property name="jmsQueue" value="jms/death${DEATH_DATE_ENV}Queue" /> -->
+        <!-- above jndi name does not work for acivemq -->
+	    <property name="jmsQueue" value="death${DEATH_DATE_ENV}Queue" />
+    </custom-resource>
+    <custom-resource factory-class="org.glassfish.resources.custom.factory.PropertiesFactory" res-type="java.util.Properties" jndi-name="death/ftp_properties">
+        <property name="deleteAfterReading" value="true" />
+        <property name="autocreateFolders" value="true" />
+        <property name="filePath" value="${FTP_FILE_PATH}" />
+        <property name="moveToPath" value="Processed" />
+        <property name="scheduler.cron" value="${SCHEDULER_CRON}" /> <!-- in PROD every day, but Sunday and Monday at 6am -->
+        <property name="ftpUser" value="${FTP_USER}" />
+        <property name="ftpPassword" value="${FTP_PWD}" />
+        <property name="ftpPort" value="22" />
+        <property name="ftpUri" value="${FTP_HOST}" />
+        <property name="ftpPrivateKey" value="${FTP_PRIVATE_KEY_NAME}" />
+    </custom-resource>
+    <custom-resource res-type="java.util.Properties" jndi-name="fileDropConfig" factory-class="org.glassfish.resources.custom.factory.PropertiesFactory">
+        <property name="BatchDeath.RECEIVE" value="true"></property>
+        <property name="BatchDeath.HCIM_IN" value="true"></property>
+        <property name="BatchDeath.HCIM_OUT" value="true"></property>
+        <property name="BatchDeath.ERROR" value="true"></property>
+        <property name="ALL.ALL" value="true"></property>
+    </custom-resource>
+</resources>

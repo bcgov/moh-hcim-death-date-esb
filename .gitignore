@@ -1,7 +1,8 @@
-# Config files and key files for each environment
-config
+# Key files
+*.openssh
+*.jks
 
-# XML files for web app
+# Unused XML files for web app
 DeathDate-war/src/main/webapp/WEB-INF
 
 # Folders that the project compiles into

@@ -69,8 +69,9 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_ID  }}:latest
           build-args: |
-            ID_RSA=${{ secrets.ID_RSA_DEV }}
-            KNOWN_HOSTS=${{ secrets.KNOWN_HOSTS_DEV }}
+            FTP_PRIVATE_KEY=${{ secrets.FTP_PRIVATE_KEY }}
+            SSL_KEY=${{ secrets.SSL_KEY }}
+            SSL_TRUST=${{ secrets.SSL_TRUST }}
           
   terraform_apply:
     name: terraform apply 

@@ -9,23 +9,19 @@ Welcome to the code repository for the HCIM DeathDate ESB App.
 Prerequisites:
 
 - You have an ActiveMQ JMS broker running and listening for tcp requests on port 61616
-
   - See [Setting Up an ActiveMQ Broker](#setting-up-an-activemq-broker)
-
 - You have created and configured a Postgres database
-
   - See [Database Setup](#database-setup)
-
 - You have copies of the configuration files not included in this GitHub repository
-
-  - You will need the folder `config/local` (and its contents) and the file `local.env`
-
+  - You will need the ftp and ssl certificates and the file `local.env`
   - Ensure that all of the passwords are set in `local.env`
 
-To run the app in docker on a local machine, build the Docker image from the provided Dockerfile.
+Before building the app, also ensure that the lines in the Dockerfile for copying the certificates into the container reflect the way you are using it. If you are building locally and you have the files deathDevTest.openssh, keys.jks, and trust.jks in config/local, you can comment out the lines that copy the keys from build args and uncomment the lines that copy the files directly. The method using build args is meant for builds executed from a GitHub workflow since the certificates are stored in GitHub Secrets rather than files.
+
+To run the app in docker on a local machine, build the Docker image from the Dockerfile in this repo's root directory. Note the period for the path at the end of the command, and change it if necessary.
 
 ```
-docker build -t {name-of-image} {path-to-Dockerfile-directory}
+docker build -t {name-of-image} .
 ```
 
 Then run the Docker container and map it to port 8080. Make sure you have the correct environment variables in your .env file and that all of the passwords are correct.
@@ -38,11 +34,11 @@ docker run --name {name-of-container} --env-file {path-to-env-file} -p 8080:8080
 
 To make sure the app is running, visit `http://localhost:8080/DeathDate`. You should see a simple web page showing the header "CRS Death Date".
 
-The app is also configured to check the ftp server for files at times determined by the SCHEDULER_CRON environment variable (note that this cron syntax includes a "seconds" field in the leftmost position in addition to all of the regular fields). Check the logs for output at the appropriate times and ensure that there are no errors. The program should grab the file, log some information in the database, and delete the file.
+The app is also configured to check the ftp server for files at times determined by the SCHEDULER_CRON environment variable (note that this cron syntax includes a "seconds" field in the leftmost position in addition to all of the regular fields). Check the logs for output at the appropriate times and ensure that there are no errors. The program should grab a file from the ftp server if one is present, log some information in the database, and delete the file. If there is no file, the app should log two messages indicating that it started the process and then finished it.
 
 ## Database Setup
 
-To set up the application's database, run `deathdate_pg.sql` in a new Postgres database named `registries`. The script will create a user called "role_esb_death" and all of the tables and sequences required by the application. Then you need to add a password for the user; you can do this either with the psql command `\password role_esb_death`, or you can modify the `create user role_esb_death superuser` line in `deathdate_pg.sql` to end with `password {password}`.
+To set up the application's database, run `deathdate_pg.sql` in a new Postgres database named `registries`. The script will create a user called "role_esb_death" and all of the tables and sequences required by the application. Then you need to add a password for the user; you can do this either with the psql command `\password role_esb_death`, or you can modify the `create user role_esb_death` line in `deathdate_pg.sql` to end with `password {password}`.
 
 ## Setting Up an ActiveMQ Broker
 
@@ -52,9 +48,9 @@ If the activemq console is working, you can create a new broker with `activemq c
 
 The broker should start up and print some logs in the terminal window. To stop it, press Ctrl+C. If the broker fails to start up, it may be because one or more of the ports it is trying to use are already occupied. Make sure you are not already running a broker in another terminal. If you aren't, you can either try to find out which apps are using the ports and stop them, or you can change the ports in `conf/activemq.xml` and try to start it up again. Make sure to update the port in your `local.env` file to reflect the change.
 
-If you are trying to discover the app that is using the ports and you cannot find it, it may be because some of the ports are in the ephemeral port range. On this range, apps and system services can freely use ports without reporting their usage. If this is the case, you can likely fix the issue by restarting your computer. If that is impossible and you cannot change the ports in the configuration file, you'll have to explore alternative solutions.
+If you are trying to discover the app that is using the ports and you cannot find it, it may be because some of the ports the broker uses by default are in the ephemeral port range. On this range, apps and system services can freely use ports without reporting their usage. If this is the case, you can likely fix the issue by restarting your computer. If that is impossible and you cannot change the ports in the configuration file, you'll have to explore alternative solutions.
 
-You can verify that the broker is running by accessing http://localhost:8161 in a web browser. After logging in with default credentials `username=admin password=admin` You should see a simple page showing "Welcome to the Apache ActiveMQ!".
+You can verify that the broker is running by accessing http://localhost:8161 in a web browser. After logging in with default credentials `username: admin` and `password: admin`, you should see a simple page showing "Welcome to the Apache ActiveMQ!".
 
 ## Code Organization
 

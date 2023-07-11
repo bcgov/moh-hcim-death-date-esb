@@ -2,9 +2,5 @@
 *.openssh
 *.jks
 
-# Unused XML files for web app
-DeathDate-war/src/main/webapp/WEB-INF
-
-# Folders that the project compiles into
 DeathDate-war/target
 ESB-common/target

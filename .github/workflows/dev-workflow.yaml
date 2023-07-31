@@ -3,7 +3,7 @@ on:
    workflow_dispatch:
      inputs:
         environment:
-         description: 'Environment to run tests against' 
+         description: 'Environment to deploy to' 
          type: environment 
          required: true
         version:
@@ -14,7 +14,7 @@ on:
 #       - main
 #   pull_request:
   
-concurrency: dev
+concurrency: ${{ github.event.inputs.environment }}
 
 env:
 #  APP_IMAGE: ${{ secrets.APP_IMAGE }} 
@@ -23,7 +23,7 @@ env:
   TF_VERSION: 1.2.2
   TG_VERSION: 0.37.1
   TG_SRC_PATH: Terraform
-  TFC_WORKSPACE: dev
+  TFC_WORKSPACE: ${{ github.event.inputs.environment }}
   
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -32,7 +32,7 @@ permissions:
 jobs:
   docker_push:
     name: docker push
-    environment:  dev
+    environment:  ${{ github.event.inputs.environment }}
     runs-on: ubuntu-22.04
     steps:
       - name: Check out the repo
@@ -75,7 +75,7 @@ jobs:
           
   terraform_apply:
     name: terraform apply 
-    environment: dev
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-22.04
     needs: docker_push
     steps:

@@ -40,6 +40,8 @@ The app is also configured to check the ftp server for files at times determined
 
 To set up the application's database, run `deathdate_pg.sql` in a new Postgres database named `registries`. The script will create a user called "role_esb_death" and all of the tables and sequences required by the application. Then you need to add a password for the user; you can do this either with the psql command `\password role_esb_death`, or you can modify the `create user role_esb_death` line in `deathdate_pg.sql` to end with `password {password}`.
 
+You may need to restart the database in order for the password change to be reflected.
+
 ## Setting Up an ActiveMQ Broker
 
 The app uses an ActiveMQ JMS broker. To set one up, first download [ActiveMQ 5](https://activemq.apache.org/components/classic/download/) and unzip it in a convenient place. Then navigate to the folder's `bin` directory in a terminal and run `./activemq console` (or just `activemq console` depending on your terminal) to make sure it's working. To be able to run activemq commands from anywhere, you can add this directory to your PATH environment variable if you want to. If you don't, you'll only be able to run activemq commands from one of the activemq `bin` directories, including those created with each broker you instantiate.

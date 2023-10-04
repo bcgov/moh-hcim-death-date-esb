@@ -81,9 +81,9 @@ variable "application" {
   description = "name of application being executed"
 }
 
-variable "domain" {
-  description = "Domain name being used to access the website"
-}
+# variable "domain" {
+#   description = "Domain name being used to access the website"
+# }
 variable "alb_origin_id" {
   description = "Domain name of OCIO Perimeter loadbalancer"
 }

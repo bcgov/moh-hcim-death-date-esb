@@ -36,66 +36,48 @@ resource "aws_db_subnet_group" "deathdate_subnet_group" {
   }
 }
 
-data "aws_rds_engine_version" "postgresql" {
-  engine  = "aurora-postgresql"
-  version = "13.9"
-  filter {
-    name = "engine-mode"
-    values = [ "serverless" ]
-  }
-}
+module "postgres_rds" {
+  source = "terraform-aws-modules/rds/aws"
 
-module "aurora_postgresql_v2" {
-  source = "terraform-aws-modules/rds-aurora/aws"
-  version = "7.7.1"
+  identifier = "${var.application}-${var.target_env}-audit"
 
-  name              = "${var.deathdate_cluster_name}-${var.target_env}"
-  engine            = data.aws_rds_engine_version.postgresql.engine
-  engine_mode       = "provisioned"
-  engine_version    = data.aws_rds_engine_version.postgresql.version
-  storage_encrypted = true
-  database_name     = var.deathdate_database_name
+  engine            = "postgresql"
+  engine_version    = "13.9"
+  instance_class    = "db.t3.micro"
+  allocated_storage = 5
 
-  vpc_id                 = data.aws_vpc.main.id
+  db_name  = "demodb"
+  username = "${var.deathdate_master_username}"
+  password = "${random_password.deathdate_master_password.result}"
+  port     = "5432"
+
   vpc_security_group_ids = [data.aws_security_group.data.id]
-  db_subnet_group_name   = aws_db_subnet_group.deathdate_subnet_group.name
 
-  master_username = var.deathdate_master_username
-  master_password = random_password.deathdate_master_password.result
+  maintenance_window = "Mon:00:00-Mon:03:00"
+  backup_window      = "03:00-06:00"
 
-  create_cluster         = true
-  create_security_group  = false
-  create_db_subnet_group = false
-  create_monitoring_role = false
-  create_random_password = false
-
-  apply_immediately   = true
-  skip_final_snapshot = true
-
-  db_parameter_group_name         = aws_db_parameter_group.deathdate_postgresql13.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.deathdate_postgresql13.id
-
-  serverlessv2_scaling_configuration = {
-    min_capacity = 0.5
-    max_capacity = 1
-  }
-
-  instance_class = "db.serverless"
-  instances = {
-    one = {}
-    two = {}
-  }
+  # Enhanced Monitoring - see example for details on how to create the role
+  # by yourself, in case you don't want to create it automatically
+  monitoring_interval    = "30"
+  monitoring_role_name   = "MyRDSMonitoringRole"
+  create_monitoring_role = true
 
   tags = {
-    managed-by = "terraform"
+    CreatedBy = "terraform"
   }
 
-  enabled_cloudwatch_logs_exports = ["postgresql"]
+  # DB subnet group
+  create_db_subnet_group = true
+  subnet_ids             = [data.aws_subnets.data.ids]
+
+
+  # Database Deletion Protection
+  #deletion_protection = true
 }
 
 resource "aws_db_parameter_group" "deathdate_postgresql13" {
   name        = "${var.deathdate_cluster_name}-parameter-group"
-  family      = "aurora-postgresql13"
+  family      = "postgresq13"
   description = "${var.deathdate_cluster_name}-parameter-group"
   tags = {
     managed-by = "terraform"
@@ -104,7 +86,7 @@ resource "aws_db_parameter_group" "deathdate_postgresql13" {
 
 resource "aws_rds_cluster_parameter_group" "deathdate_postgresql13" {
   name        = "${var.deathdate_cluster_name}-cluster-parameter-group"
-  family      = "aurora-postgresql13"
+  family      = "postgres13"
   description = "${var.deathdate_cluster_name}-cluster-parameter-group"
   tags = {
     managed-by = "terraform"

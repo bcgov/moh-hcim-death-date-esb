@@ -31,8 +31,7 @@ resource "aws_ecs_task_definition" "deathdate_td" {
     {
       essential   = true
       name        = "deathdate-${var.target_env}-definition"
-      #change to variable to env. for GH Actions
-      image       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ca-central-1.amazonaws.com/deathdate:latest"
+      image       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.ca-central-1.amazonaws.com/hcim-death-date-esb:latest"
       cpu         = var.fargate_cpu
       memory      = var.fargate_memory
       networkMode = "awsvpc"
@@ -44,28 +43,50 @@ resource "aws_ecs_task_definition" "deathdate_td" {
         }
       ]
       secrets = [
+        {"name": "PG_URL", 
+         "valueFrom": "${aws_secretsmanager_secret_version.rds_credentials.arn}:username::"},
         {"name": "PG_USER", 
          "valueFrom": "${aws_secretsmanager_secret_version.rds_credentials.arn}:username::"},
         {"name": "PG_PASSWORD", 
          "valueFrom": "${aws_secretsmanager_secret_version.rds_credentials.arn}:password::"},
-        {"name": "JDBC_SETTING", 
-         "valueFrom": "${aws_secretsmanager_secret_version.jdbc_setting.arn}"},
-         {"name": "deathdate_keycloak_client_secret",
+         {"name": "HCIM_REVISED_PERSON_ENDPOINT",
          "valueFrom": "${aws_secretsmanager_secret_version.deathdate_keycloak-client-secret.arn}"},
-         {"name": "REDIRECT_URI",
+         {"name": "HCIM_SSL_PWD",
          "valueFrom": "${aws_secretsmanager_secret_version.redirect_uri.arn}"},
-         {"name": "SITEMINDER_URI",
+         {"name": "HCIM_SSL_KEY_PWD",
          "valueFrom": "${aws_secretsmanager_secret_version.deathdate_siteminder_uri.arn}"},
-         {"name": "PROVIDER_URI",
+         {"name": "HCIM_SSL_TRUST_PWD",
+         "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"},
+         {"name": "HCIM_FILE_DROP_PATH",
+         "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"},
+         {"name": "HCIM_FILE_ARCHIVE_PATH",
+         "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"},
+         {"name": "FTP_HOST",
+         "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"},
+         {"name": "FTP_USER",
+         "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"},
+         {"name": "FTP_FILE_PATH",
+         "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"},
+         {"name": "FTP_PWD",
+         "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"},
+         {"name": "FTP_PRIVATE_KEY_NAME",
+         "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"},
+         {"name": "JMS_BROKER_URL",
          "valueFrom": "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}"}
       ]
       environment = [
-        {"name": "XMX_DEV",
-         "value": "\\-Xmx1024m"},
-        {"name": "XMS_DEV",
-         "value": "\\-Xms512m"}
+        {"name": "DEATH_DATE_ENV",
+         "value": "Local"},
+        {"name": "APP_LOG_LEVEL",
+         "value": "ERROR"},
+         {"name": "CAMEL_LOG_LEVEL",
+         "value": "INFO"},
+         {"name": "SCHEDULER_CRON",
+         "value": "INFO"},
+         {"name": "JVM_ARGS",
+         "value": "INFO"}
       ]
-      #change awslog group
+      
       logConfiguration = {
       "logDriver": "awslogs",
       "options": {

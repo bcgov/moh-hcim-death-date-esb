@@ -102,6 +102,11 @@ resource "aws_ecs_service" "main" {
   #Health Check need to go up?
   health_check_grace_period_seconds = 60
   wait_for_steady_state             = false
+  force_new_deployment              = true
+
+  triggers = {
+    redeployment = timestamp()
+  }
 
   network_configuration {
     security_groups  = [data.aws_security_group.app.id]

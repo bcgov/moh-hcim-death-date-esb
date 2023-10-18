@@ -33,7 +33,9 @@ generate "tfvars" {
     app_image  = "${local.app_image}"
     target_env = "${local.environment}"
     application = "deathdate"
-    
+    fargate_cpu = 512
+    fargate_memory = 1024
+    app_port = 8181
 EOF
 }
 

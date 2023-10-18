@@ -9,6 +9,10 @@ on:
         version:
          description: 'Version Number'
          required: false
+        zap_scan:
+         description: 'Run ZAP Scan'
+         type: boolean
+         required: false
 #   push: 
 #     branches:
 #       - main
@@ -20,8 +24,8 @@ env:
 #  APP_IMAGE: ${{ secrets.APP_IMAGE }} 
   IMAGE_ID: ${{ secrets.AWS_ECR_URI }}
   IMAGE_NAME: hcimdddev
-  TF_VERSION: 1.2.2
-  TG_VERSION: 0.37.1
+  TF_VERSION: 1.3.7
+  TG_VERSION: 0.44.5
   TG_SRC_PATH: Terraform
   TFC_WORKSPACE: ${{ github.event.inputs.environment }}
   
@@ -31,7 +35,7 @@ permissions:
   
 jobs:
   docker_push:
-    name: docker push
+    name: Docker Push
     environment:  ${{ github.event.inputs.environment }}
     runs-on: ubuntu-22.04
     steps:
@@ -44,11 +48,13 @@ jobs:
           role-to-assume: ${{ secrets.TERRAFORM_DEPLOY_ROLE_ARN }}
           aws-region: ca-central-1
           
-      - name: Login to Amazon ECR
-        id: login-ecr
+      - name: Amazon ECR Login
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: 'true'
         
-      - uses: actions/cache@v3
+      - name: Cache
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -66,6 +72,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          file: hcimdd/Dockerfile
           push: true
           tags: ${{ env.IMAGE_ID  }}:latest
           build-args: |
@@ -74,9 +81,9 @@ jobs:
             SSL_TRUST=${{ secrets.SSL_TRUST_BASE_64 }}
           
   terraform_apply:
-    name: terraform apply 
+    name: Terraform Apply 
     environment: ${{ github.event.inputs.environment }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs: docker_push
     steps:
     
@@ -91,11 +98,13 @@ jobs:
           role-to-assume: ${{ secrets.TERRAFORM_DEPLOY_ROLE_ARN }}
           aws-region: ca-central-1
           
-      - uses: hashicorp/setup-terraform@v2
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
           
-      - uses: autero1/action-terragrunt@v1.3.1
+      - name: Terragrunt installer
+        uses: autero1/action-terragrunt@v1.3.2
         with:
           terragrunt_version: ${{ env.TG_VERSION }}
             
@@ -105,16 +114,17 @@ jobs:
           app_image: ${{ env.IMAGE_ID }}:${{ github.sha }}
           LICENSE_PLATE: ${{ secrets.MY_LICENSE_PLATE }}
         run: |
-            echo "repository variable : '${{ vars.ENVIRONMENT }}' " 
-            echo "Environment variable: '${{ github.event.inputs.environment }}' " 
             terragrunt run-all apply --terragrunt-non-interactive
+  
   zap_scan:
+    name: Run Zap Scan
+    if: input.zap_scan == true
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     permissions: write-all
-    name: Scan the webapplication
     needs: terraform_apply
     steps:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.7.0
         with:
-          target: 'https://hcim-death-date-esb.<license plate>-dev.nimbus.cloud.gov.bc.ca/'
+          target: ${{ vars.APPLICATION_URL }}

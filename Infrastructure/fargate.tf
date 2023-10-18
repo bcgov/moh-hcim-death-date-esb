@@ -1,10 +1,5 @@
-resource "aws_cloudwatch_log_group" "ecs_monitoring" {
-  name = "ecs-${var.application}-monitoring"
-  retention_in_days = "90"
-}
-
 resource "aws_ecs_cluster" "deathdate_cluster" {
-  name = "deathdate_cluster"
+  name = "{var.application}_cluster"
 }
 
 resource "aws_ecs_cluster_capacity_providers" "deathdate_cluster" {

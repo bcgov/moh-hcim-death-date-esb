@@ -21,11 +21,11 @@ resource "aws_alb_target_group" "app" {
   deregistration_delay = 30
   lifecycle {
     create_before_destroy = true
-    ignore_changes = [name]
+    ignore_changes        = [name]
   }
   stickiness {
     type = "lb_cookie"
-    
+
   }
 
   health_check {
@@ -38,7 +38,7 @@ resource "aws_alb_target_group" "app" {
     unhealthy_threshold = "10"
   }
 
-    tags = local.common_tags
+  tags = local.common_tags
 }
 
 resource "aws_lb_listener_rule" "host_based_weighted_routing" {

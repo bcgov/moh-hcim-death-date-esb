@@ -25,12 +25,12 @@ variable "fargate_memory" {
 variable "deathdate_cluster_name" {
   description = "Name for the FAM database cluster -- must be unique"
   type        = string
-  default     = "deathdate-cluster" 
+  default     = "deathdate-cluster"
 }
 
-variable "cluster_name" { 
-  description = "Name for ECS cluster (with underscore)" 
-  type        = string 
+variable "cluster_name" {
+  description = "Name for ECS cluster (with underscore)"
+  type        = string
   default     = "deathdate_cluster"
 }
 
@@ -58,7 +58,7 @@ variable "alb_name" {
 }
 
 variable "acl_value" {
-    default = "private"
+  default = "private"
 }
 
 variable "app_port" {
@@ -74,7 +74,7 @@ variable "app_image" {
 
 variable "app_count" {
   description = "Number of docker containers to run"
-  default     = 2
+  default     = 1
 }
 
 variable "application" {
@@ -90,7 +90,7 @@ variable "alb_origin_id" {
 
 variable "fam_console_idp_name" {
   description = "Identifies which version of IDIR to use (DEV, TEST, or PROD)"
-  type = string
+  type        = string
 }
 
 variable "db_instance_identifier" {

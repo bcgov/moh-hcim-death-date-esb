@@ -6,7 +6,7 @@ resource "aws_secretsmanager_secret" "pg_user" {
   name = "PG_USER"
 }
 
-resource "aws_secretsmanager_secret" "hcim_rp_endpoint"{ 
+resource "aws_secretsmanager_secret" "hcim_rp_endpoint" {
   name = "HCIM_RP_ENDPOINT"
 }
 
@@ -59,11 +59,11 @@ resource "aws_secretsmanager_secret_version" "jdbc_setting" {
   secret_string = "changeme"
 }
 
-resource "aws_secretsmanager_secret" "deathdate_provider_uri"{ 
+resource "aws_secretsmanager_secret" "deathdate_provider_uri" {
   name = "${var.application}_provider_uri"
 }
 
-resource "aws_secretsmanager_secret" "deathdate_siteminder_uri"{ 
+resource "aws_secretsmanager_secret" "deathdate_siteminder_uri" {
   name = "${var.application}_siteminder_uri"
 }
 
@@ -79,8 +79,8 @@ resource "aws_secretsmanager_secret_version" "rds_credentials" {
   "dbClusterIdentifier": "${module.aurora_postgresql_v2.cluster_id}"
 }
 EOF
-lifecycle {
-  ignore_changes = [ secret_string  ]
+  lifecycle {
+    ignore_changes = [secret_string]
   }
 }
 

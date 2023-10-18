@@ -47,8 +47,8 @@ module "postgres_rds" {
   allocated_storage = 5
 
   db_name  = "demodb"
-  username = "${var.deathdate_master_username}"
-  password = "${random_password.deathdate_master_password.result}"
+  username = var.deathdate_master_username
+  password = random_password.deathdate_master_password.result
   port     = "5432"
 
   vpc_security_group_ids = [data.aws_security_group.data.id]
@@ -115,7 +115,7 @@ resource "aws_secretsmanager_secret_version" "deathdate_mastercreds_secret_versi
    }
   EOF
   lifecycle {
-  ignore_changes = [ secret_string  ]
+    ignore_changes = [secret_string]
   }
 }
 
@@ -155,6 +155,6 @@ resource "aws_secretsmanager_secret_version" "deathdate_apicreds_secret_version"
    }
   EOF
   lifecycle {
-  ignore_changes = [ secret_string  ]
+    ignore_changes = [secret_string]
   }
 }

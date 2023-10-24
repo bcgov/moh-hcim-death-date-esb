@@ -71,7 +71,11 @@ resource "aws_ecs_task_definition" "deathdate_td" {
         { name = "API_KEY_PRESIGNED_S3",
         valueFrom = "${aws_secretsmanager_secret_version.api_key.arn}" },
         { name = "API_URL_PRESIGNED_S3",
-        valueFrom = "${aws_secretsmanager_secret_version.api_url.arn}" }
+        valueFrom = "${aws_secretsmanager_secret_version.api_url.arn}" },
+        { name = "JMS_BROKER_USERNAME",
+        valueFrom = "${aws_secretsmanager_secret_version.jms_user.arn}" },
+        { name = "JMS_BROKER_PASSWORD",
+        valueFrom = "${aws_secretsmanager_secret_version.jms_pass.arn}" }
       ]
       environment = [
         { name = "APP_LOG_LEVEL",

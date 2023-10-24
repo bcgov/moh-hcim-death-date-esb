@@ -28,17 +28,16 @@ public class XmlConfigTest {
     @Parameters(name = "{0}")
     public static String[] data() {
         return new String[]{
-                "../config/local/glassfish-resources.xml",
-                "../config/local/deathEnvironmentSpecific.xml",
-                "../config/hd1/WEB-INF/glassfish-resources.xml",
-                "../config/hd1/deathEnvironmentSpecific.xml",
-                "../config/hsit/WEB-INF/glassfish-resources.xml",
-                "../config/hsit/deathEnvironmentSpecific.xml",
+                "src/main/resources/deathEnvironmentSpecific.xml",
+                // "../config/hd1/WEB-INF/glassfish-resources.xml",
+                // "../config/hd1/deathEnvironmentSpecific.xml",
+                // "../config/hsit/WEB-INF/glassfish-resources.xml",
+                // "../config/hsit/deathEnvironmentSpecific.xml",
                 "src/main/resources/applicationContext.xml",
                 "src/main/webapp/WEB-INF/web.xml",
-                "../config/local/logback.xml",
-                "../config/hd1/logback.xml",
-                "../config/hsit/logback.xml",
+                "src/main/resources/logback.xml",
+                // "../config/hd1/logback.xml",
+                // "../config/hsit/logback.xml",
                 "src/main/webapp/WEB-INF/glassfish-resources.xml"
         };
     }

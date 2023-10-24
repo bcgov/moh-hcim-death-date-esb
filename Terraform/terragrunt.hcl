@@ -5,6 +5,7 @@ terraform {
     project             = get_env("LICENSE_PLATE")
     environment         = reverse(split("/", get_terragrunt_dir()))[0]
     app_image           = get_env("app_image", "")
+    timestamp           = get_env("TF_VAR_TIMESTAMP")
  }
 
 generate "remote_state" {
@@ -32,6 +33,7 @@ generate "tfvars" {
   contents          = <<-EOF
     app_image  = "${local.app_image}"
     target_env = "${local.environment}"
+    project = "${local.project}"
     application = "deathdate"
     fargate_cpu = 512
     fargate_memory = 1024
@@ -47,4 +49,8 @@ provider "aws" {
   region  = var.aws_region
 }
 EOF
+}
+
+inputs = {
+   timestamp = local.timestamp
 }

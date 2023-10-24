@@ -30,9 +30,7 @@
         <property name="fileDropPath" value="${HCIM_FILE_DROP_PATH}" /> <!-- MUST include "/" at the end -->
         <property name="archivePath" value="${HCIM_FILE_ARCHIVE_PATH}" />
         <property name="healthCheck" value="false" />
-        <!-- <property name="jmsQueue" value="jms/death${DEATH_DATE_ENV}Queue" /> -->
-        <!-- above jndi name does not work for acivemq -->
-	    <property name="jmsQueue" value="death${DEATH_DATE_ENV}Queue" />
+	    <property name="jmsQueue" value="DeathDate-Broker" />
     </custom-resource>
     <custom-resource factory-class="org.glassfish.resources.custom.factory.PropertiesFactory" res-type="java.util.Properties" jndi-name="death/ftp_properties">
         <property name="deleteAfterReading" value="true" />

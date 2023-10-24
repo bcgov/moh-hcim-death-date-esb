@@ -7,6 +7,10 @@ variable "aws_region" {
   default     = "ca-central-1"
 }
 
+variable "project" {
+  description = "The AWS OCIO LicensePlate"
+}
+
 variable "ecs_task_execution_role_name" {
   description = "ECS task execution role name"
   default     = "deathdate_EcsTaskExecutionRole"
@@ -96,4 +100,9 @@ variable "fam_console_idp_name" {
 variable "db_instance_identifier" {
   description = "Identifies the cluster ID of aurora_rds_v2"
   default     = "deathdate-cluster"
+}
+
+
+variable "timestamp" {
+  type = string
 }

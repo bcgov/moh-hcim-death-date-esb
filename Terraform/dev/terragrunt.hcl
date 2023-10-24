@@ -8,6 +8,7 @@ environment = "dev"
 
 locals {
   project = get_env("LICENSE_PLATE")
+  # timestamp - get_env("TF_VAR_TIMESTAMP")
 #   commontags = [
 #     environment = "dev",
 #     application = "fmdb"
@@ -24,5 +25,10 @@ generate "dev_tfvars" {
   app_port = 8181
   fam_console_idp_name = "DEV-IDIR"
   alb_origin_id = "deathdate.jy4drv-dev.nimbus.cloud.gov.bc.ca"
+  
   EOF
 }
+
+# inputs = {
+#   timestamp = local.timestamp
+# }

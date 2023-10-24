@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "deathdate_cluster" {
-  name = "{var.application}_cluster"
+  name = "${var.application}_cluster"
 }
 
 resource "aws_ecs_cluster_capacity_providers" "deathdate_cluster" {
@@ -39,54 +39,57 @@ resource "aws_ecs_task_definition" "deathdate_td" {
       ]
       secrets = [
         { name = "PG_URL",
-        valueFrom = "${aws_secretsmanager_secret_version.rds_credentials.arn}:username::" },
+        valueFrom = "${aws_secretsmanager_secret_version.pg_url.arn}" },
         { name = "PG_USER",
         valueFrom = "${aws_secretsmanager_secret_version.rds_credentials.arn}:username::" },
         { name = "PG_PASSWORD",
         valueFrom = "${aws_secretsmanager_secret_version.rds_credentials.arn}:password::" },
         { name = "HCIM_REVISED_PERSON_ENDPOINT",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_keycloak-client-secret.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.hcim_rp_endpoint.arn}" },
         { name = "HCIM_SSL_PWD",
-        valueFrom = "${aws_secretsmanager_secret_version.redirect_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.hcim_ssl_pwd.arn}" },
         { name = "HCIM_SSL_KEY_PWD",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_siteminder_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.hcim_ssl_key_pwd.arn}" },
         { name = "HCIM_SSL_TRUST_PWD",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.hcim_ssl_trust_pwd.arn}" },
         { name = "HCIM_FILE_DROP_PATH",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.hcim_file_drop_path.arn}" },
         { name = "HCIM_FILE_ARCHIVE_PATH",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.hcim_file_archive_path.arn}" },
         { name = "FTP_HOST",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.ftp_host.arn}" },
         { name = "FTP_USER",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.ftp_user.arn}" },
         { name = "FTP_FILE_PATH",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.ftp_file_path.arn}" },
         { name = "FTP_PWD",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.ftp_pwd.arn}" },
         { name = "FTP_PRIVATE_KEY_NAME",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" },
+        valueFrom = "${aws_secretsmanager_secret_version.ftp_private_key_name.arn}" },
         { name = "JMS_BROKER_URL",
-        valueFrom = "${aws_secretsmanager_secret_version.deathdate_provider_uri.arn}" }
+        valueFrom = "${aws_secretsmanager_secret_version.jms_broker_url.arn}" },
+        { name = "API_KEY_PRESIGNED_S3",
+        valueFrom = "${aws_secretsmanager_secret_version.api_key.arn}" },
+        { name = "API_URL_PRESIGNED_S3",
+        valueFrom = "${aws_secretsmanager_secret_version.api_url.arn}" }
       ]
       environment = [
-        { name : "DEATH_DATE_ENV",
-        value = "Local" },
         { name = "APP_LOG_LEVEL",
         value = "ERROR" },
         { name = "CAMEL_LOG_LEVEL",
         value = "INFO" },
         { name = "SCHEDULER_CRON",
-        value = "INFO" },
+        value = "0 * * * * *" },
         { name = "JVM_ARGS",
-        value = "INFO" }
+        value = "-Xms512m -Xmx756m" }
       ]
 
       logConfiguration = {
         "logDriver" : "awslogs",
         "options" : {
-          "awslogs-group" : "${aws_cloudwatch_log_group.ecs_monitoring.name}",
-          "awslogs-region" : "ca-central-1",
+          "awslogs-create-group"  = "true"
+          "awslogs-group" : "/ecs/${var.application}",
+          "awslogs-region" : "${var.aws_region}",
           "awslogs-stream-prefix" : "streaming"
         }
       }
@@ -95,7 +98,7 @@ resource "aws_ecs_task_definition" "deathdate_td" {
 }
 
 resource "aws_ecs_service" "main" {
-  name            = "deathdate-${var.target_env}-service"
+  name            = "${var.application}-${var.target_env}-service"
   cluster         = aws_ecs_cluster.deathdate_cluster.arn
   task_definition = aws_ecs_task_definition.deathdate_td.arn
   desired_count   = 2
@@ -105,7 +108,7 @@ resource "aws_ecs_service" "main" {
   force_new_deployment              = true
 
   triggers = {
-    redeployment = timestamp()
+    redeployment = var.timestamp
   }
 
   network_configuration {

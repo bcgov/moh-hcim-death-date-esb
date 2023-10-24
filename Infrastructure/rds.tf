@@ -40,13 +40,14 @@ module "postgres_rds" {
   source = "terraform-aws-modules/rds/aws"
 
   identifier = "${var.application}-${var.target_env}-audit"
-
-  engine            = "postgresql"
+  major_engine_version = "13"
+  family = "postgres13"
+  engine            = "postgres"
   engine_version    = "13.9"
   instance_class    = "db.t3.micro"
   allocated_storage = 5
 
-  db_name  = "demodb"
+  db_name  = "${var.application}Audit"
   username = var.deathdate_master_username
   password = random_password.deathdate_master_password.result
   port     = "5432"
@@ -68,7 +69,7 @@ module "postgres_rds" {
 
   # DB subnet group
   create_db_subnet_group = true
-  subnet_ids             = [data.aws_subnets.data.ids]
+  subnet_ids             = data.aws_subnets.data.ids
 
 
   # Database Deletion Protection
@@ -77,7 +78,7 @@ module "postgres_rds" {
 
 resource "aws_db_parameter_group" "deathdate_postgresql13" {
   name        = "${var.deathdate_cluster_name}-parameter-group"
-  family      = "postgresq13"
+  family      = "postgres13"
   description = "${var.deathdate_cluster_name}-parameter-group"
   tags = {
     managed-by = "terraform"

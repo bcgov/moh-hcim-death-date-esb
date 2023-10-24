@@ -1,7 +1,3 @@
-resource "aws_secretsmanager_secret" "pg_url" {
-  name = "PG_URL"
-}
-
 resource "aws_secretsmanager_secret" "pg_user" {
   name = "PG_USER"
 }
@@ -10,12 +6,15 @@ resource "aws_secretsmanager_secret" "hcim_rp_endpoint" {
   name = "HCIM_RP_ENDPOINT"
 }
 
-resource "aws_secretsmanager_secret" "ssl_pwd" {
+resource "aws_secretsmanager_secret" "hcim_ssl_pwd" {
   name = "SSL_PWD"
 }
 
 resource "aws_secretsmanager_secret" "hcim_ssl_key_pwd" {
   name = "HCIM_SSL_KEY_PWD"
+}
+resource "aws_secretsmanager_secret" "pg_url" {
+  name = "PG_URL"
 }
 
 resource "aws_secretsmanager_secret" "hcim_ssl_trust_pwd" {
@@ -54,17 +53,12 @@ resource "aws_secretsmanager_secret" "jms_broker_url" {
   name = "JMS_BROKER_URL"
 }
 
-resource "aws_secretsmanager_secret_version" "jdbc_setting" {
-  secret_id     = aws_secretsmanager_secret.jdbc_setting.id
-  secret_string = "changeme"
+resource "aws_secretsmanager_secret" "api_key" {
+  name = "API_KEY_PRESIGNED_S3"
 }
 
-resource "aws_secretsmanager_secret" "deathdate_provider_uri" {
-  name = "${var.application}_provider_uri"
-}
-
-resource "aws_secretsmanager_secret" "deathdate_siteminder_uri" {
-  name = "${var.application}_siteminder_uri"
+resource "aws_secretsmanager_secret" "api_url" {
+  name = "API_URL_PRESIGNED_S3"
 }
 
 resource "aws_secretsmanager_secret_version" "rds_credentials" {
@@ -72,11 +66,7 @@ resource "aws_secretsmanager_secret_version" "rds_credentials" {
   secret_string = <<EOF
 {
   "username": "deathdate_proxy_user",
-  "password": "changeme",
-  "engine": "${data.aws_rds_engine_version.postgresql.version}",
-  "host": "${module.aurora_postgresql_v2.cluster_endpoint}",
-  "port": ${module.aurora_postgresql_v2.cluster_port},
-  "dbClusterIdentifier": "${module.aurora_postgresql_v2.cluster_id}"
+  "password": "changeme"
 }
 EOF
   lifecycle {
@@ -84,22 +74,71 @@ EOF
   }
 }
 
-resource "aws_secretsmanager_secret_version" "deathdate_keycloak-client-secret" {
-  secret_id     = aws_secretsmanager_secret.deathdate_keycloak-client-secret.id
+resource "aws_secretsmanager_secret_version" "hcim_rp_endpoint" {
+  secret_id     = aws_secretsmanager_secret.hcim_rp_endpoint.id
   secret_string = "changeme"
 }
 
-resource "aws_secretsmanager_secret_version" "redirect_uri" {
-  secret_id     = aws_secretsmanager_secret.redirect_uri.id
+resource "aws_secretsmanager_secret_version" "hcim_ssl_pwd" {
+  secret_id     = aws_secretsmanager_secret.hcim_ssl_pwd.id
   secret_string = "changeme"
 }
 
-resource "aws_secretsmanager_secret_version" "deathdate_provider_uri" {
-  secret_id     = aws_secretsmanager_secret.deathdate_provider_uri.id
+resource "aws_secretsmanager_secret_version" "pg_url" {
+  secret_id     = aws_secretsmanager_secret.pg_url.id
   secret_string = "changeme"
 }
 
-resource "aws_secretsmanager_secret_version" "deathdate_siteminder_uri" {
-  secret_id     = aws_secretsmanager_secret.deathdate_siteminder_uri.id
+resource "aws_secretsmanager_secret_version" "hcim_ssl_key_pwd" {
+  secret_id     = aws_secretsmanager_secret.hcim_ssl_key_pwd.id
+  secret_string = "changeme"
+}
+
+resource "aws_secretsmanager_secret_version" "hcim_ssl_trust_pwd" {
+  secret_id     = aws_secretsmanager_secret.hcim_ssl_trust_pwd.id
+  secret_string = "changeme"
+}
+
+resource "aws_secretsmanager_secret_version" "hcim_file_drop_path" {
+  secret_id     = aws_secretsmanager_secret.hcim_file_drop_path.id
+  secret_string = "changeme"
+}
+
+resource "aws_secretsmanager_secret_version" "hcim_file_archive_path" {
+  secret_id     = aws_secretsmanager_secret.hcim_file_archive_path.id
+  secret_string = "changeme"
+}
+
+resource "aws_secretsmanager_secret_version" "ftp_host" {
+  secret_id     = aws_secretsmanager_secret.ftp_host.id
+  secret_string = "changeme"
+}
+
+resource "aws_secretsmanager_secret_version" "ftp_user" {
+  secret_id     = aws_secretsmanager_secret.ftp_user.id
+  secret_string = "changeme"
+}
+resource "aws_secretsmanager_secret_version" "ftp_file_path" {
+  secret_id     = aws_secretsmanager_secret.ftp_file_path.id
+  secret_string = "changeme"
+}
+resource "aws_secretsmanager_secret_version" "ftp_pwd" {
+  secret_id     = aws_secretsmanager_secret.ftp_pwd.id
+  secret_string = "changeme"
+}
+resource "aws_secretsmanager_secret_version" "ftp_private_key_name" {
+  secret_id     = aws_secretsmanager_secret.ftp_private_key_name.id
+  secret_string = "changeme"
+}
+resource "aws_secretsmanager_secret_version" "jms_broker_url" {
+  secret_id     = aws_secretsmanager_secret.jms_broker_url.id
+  secret_string = "${aws_mq_broker.deathdate_queue.instances.0.endpoints.0}"
+}
+resource "aws_secretsmanager_secret_version" "api_key" {
+  secret_id     = aws_secretsmanager_secret.api_key.id
+  secret_string = "changeme"
+}
+resource "aws_secretsmanager_secret_version" "api_url" {
+  secret_id     = aws_secretsmanager_secret.api_url.id
   secret_string = "changeme"
 }

@@ -39,13 +39,13 @@ resource "aws_db_subnet_group" "deathdate_subnet_group" {
 module "postgres_rds" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = "${var.application}-${var.target_env}-audit"
+  identifier           = "${var.application}-${var.target_env}-audit"
   major_engine_version = "13"
-  family = "postgres13"
-  engine            = "postgres"
-  engine_version    = "13.9"
-  instance_class    = "db.t3.micro"
-  allocated_storage = 5
+  family               = "postgres13"
+  engine               = "postgres"
+  engine_version       = "13.9"
+  instance_class       = "db.t3.micro"
+  allocated_storage    = 5
 
   db_name  = "${var.application}Audit"
   username = var.deathdate_master_username

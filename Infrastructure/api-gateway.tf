@@ -16,13 +16,13 @@ resource "aws_api_gateway_method" "dd-filedrop-method" {
 }
 
 resource "aws_api_gateway_integration" "gis-integration" {
-  rest_api_id             = aws_api_gateway_rest_api.dd-filedrop-api.id
-  resource_id             = aws_api_gateway_resource.dd-filedrop-gateway.id
-  http_method             = aws_api_gateway_method.dd-filedrop-method.http_method
+  rest_api_id = aws_api_gateway_rest_api.dd-filedrop-api.id
+  resource_id = aws_api_gateway_resource.dd-filedrop-gateway.id
+  http_method = aws_api_gateway_method.dd-filedrop-method.http_method
 
   type                    = "AWS_PROXY"
   integration_http_method = "POST"
-  uri                     = "${aws_lambda_function.terraform_lambda_func.invoke_arn}"
+  uri                     = aws_lambda_function.terraform_lambda_func.invoke_arn
 }
 
 resource "aws_api_gateway_method_response" "dd-filedrop-response" {
@@ -43,14 +43,14 @@ resource "aws_api_gateway_integration_response" "dd-filedrop-int-response" {
 }
 
 resource "aws_api_gateway_deployment" "dd-filedrop-api-deploy" {
-  depends_on = [ aws_api_gateway_method.dd-filedrop-method ]
+  depends_on  = [aws_api_gateway_method.dd-filedrop-method]
   rest_api_id = aws_api_gateway_rest_api.dd-filedrop-api.id
 }
 
 resource "aws_api_gateway_stage" "dd-filedrop-stage" {
   deployment_id = aws_api_gateway_deployment.dd-filedrop-api-deploy.id
   rest_api_id   = aws_api_gateway_rest_api.dd-filedrop-api.id
-  stage_name    = "${var.target_env}"
+  stage_name    = var.target_env
 }
 
 resource "aws_api_gateway_usage_plan" "dd-filedrop-usage-plan" {

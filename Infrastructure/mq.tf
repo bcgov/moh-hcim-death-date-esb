@@ -5,7 +5,7 @@ resource "aws_mq_broker" "deathdate_queue" {
   host_instance_type         = "mq.t3.micro"
   auto_minor_version_upgrade = true
   deployment_mode            = "SINGLE_INSTANCE"
-  security_groups = [data.aws_security_group.app.id, data.aws_security_group.data.id]
+  security_groups            = [data.aws_security_group.app.id, data.aws_security_group.data.id]
   #fix subnet id
   subnet_ids = [data.aws_subnet.app["subnet-0896ff158c3ecdc53"].id]
   logs {

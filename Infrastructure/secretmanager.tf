@@ -132,7 +132,7 @@ resource "aws_secretsmanager_secret_version" "ftp_private_key_name" {
 }
 resource "aws_secretsmanager_secret_version" "jms_broker_url" {
   secret_id     = aws_secretsmanager_secret.jms_broker_url.id
-  secret_string = "${aws_mq_broker.deathdate_queue.instances.0.endpoints.0}"
+  secret_string = aws_mq_broker.deathdate_queue.instances.0.endpoints.0
 }
 resource "aws_secretsmanager_secret_version" "api_key" {
   secret_id     = aws_secretsmanager_secret.api_key.id

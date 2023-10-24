@@ -6,15 +6,6 @@ inputs = {
 environment = "dev"
 }
 
-locals {
-  project = get_env("LICENSE_PLATE")
-  # timestamp - get_env("TF_VAR_TIMESTAMP")
-#   commontags = [
-#     environment = "dev",
-#     application = "fmdb"
-#   ]
-}
-
 generate "dev_tfvars" {
   path              = "dev.auto.tfvars"
   if_exists         = "overwrite"
@@ -29,6 +20,4 @@ generate "dev_tfvars" {
   EOF
 }
 
-# inputs = {
-#   timestamp = local.timestamp
-# }
+

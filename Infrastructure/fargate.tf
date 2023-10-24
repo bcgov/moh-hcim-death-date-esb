@@ -87,7 +87,7 @@ resource "aws_ecs_task_definition" "deathdate_td" {
       logConfiguration = {
         "logDriver" : "awslogs",
         "options" : {
-          "awslogs-create-group"  = "true"
+          "awslogs-create-group" = "true"
           "awslogs-group" : "/ecs/${var.application}",
           "awslogs-region" : "${var.aws_region}",
           "awslogs-stream-prefix" : "streaming"

@@ -118,7 +118,7 @@ jobs:
   
   zap_scan:
     name: Run Zap Scan
-    if: input.zap_scan == true
+    if: inputs.zap_scan == true
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     permissions: write-all

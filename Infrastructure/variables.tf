@@ -7,9 +7,9 @@ variable "aws_region" {
   default     = "ca-central-1"
 }
 
-variable "project" {
-  description = "The AWS OCIO LicensePlate"
-}
+#variable "project" {
+#  description = "The AWS OCIO LicensePlate"
+#}
 
 variable "ecs_task_execution_role_name" {
   description = "ECS task execution role name"
@@ -85,9 +85,6 @@ variable "application" {
   description = "name of application being executed"
 }
 
-# variable "domain" {
-#   description = "Domain name being used to access the website"
-# }
 variable "alb_origin_id" {
   description = "Domain name of OCIO Perimeter loadbalancer"
 }
@@ -101,7 +98,6 @@ variable "db_instance_identifier" {
   description = "Identifies the cluster ID of aurora_rds_v2"
   default     = "deathdate-cluster"
 }
-
 
 variable "timestamp" {
   type = string

@@ -53,7 +53,7 @@ resource "aws_lambda_function" "terraform_lambda_func" {
   filename      = "${path.root}/hcim-pre-signed-key.zip"
   function_name = "hcim-death-date-s3-lamdba-file-drop"
   role          = aws_iam_role.lambda_role.arn
-  handler       = "lambda_function.lambda_handler"
+  handler       = "hcim-pre-signed-key.lambda_handler"
   runtime       = "python3.11"
   environment {
     variables = {
@@ -68,5 +68,5 @@ resource "aws_lambda_permission" "apigw" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.terraform_lambda_func.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = aws_api_gateway_rest_api.dd-filedrop-api.arn
+  source_arn    = "${aws_api_gateway_rest_api.dd-filedrop-api.execution_arn}/*/*/hcim-death-date-esb-audit-file-drop-presigned-url"
 }

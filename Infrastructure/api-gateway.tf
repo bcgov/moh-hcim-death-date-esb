@@ -13,6 +13,7 @@ resource "aws_api_gateway_method" "dd-filedrop-method" {
   resource_id   = aws_api_gateway_resource.dd-filedrop-gateway.id
   http_method   = "ANY"
   authorization = "NONE"
+  api_key_required = true
 }
 
 resource "aws_api_gateway_integration" "gis-integration" {

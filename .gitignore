@@ -4,3 +4,12 @@
 
 DeathDate-war/target
 ESB-common/target
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+**/.terragrunt-cache/*

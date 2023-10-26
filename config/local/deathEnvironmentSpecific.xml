@@ -42,6 +42,8 @@
         trust the objects being desrializaed from Active MQ. Acive MQ server also needs to be started wtih system property
         -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=* -->
         <property name="trustAllPackages" value="true" />
+        <property name="userName" value="${JMS_BROKER_USERNAME}" />
+        <property name="password" value="${JMS_BROKER_PASSWORD}" />
     </bean>
 
     <bean id="batchRecordQueueFactoryProxy" class="org.springframework.jms.connection.TransactionAwareConnectionFactoryProxy">

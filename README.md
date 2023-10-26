@@ -20,13 +20,13 @@ Before building the app, also ensure that the lines in the Dockerfile for copyin
 
 To run the app in docker on a local machine, build the Docker image from the Dockerfile in this repo's root directory. Note the period for the path at the end of the command, and change it if necessary.
 
-```
+```bash
 docker build -t {name-of-image} .
 ```
 
 Then run the Docker container and map it to port 8080. Make sure you have the correct environment variables in your .env file and that all of the passwords are correct.
 
-```
+```bash
 docker run --name {name-of-container} --env-file {path-to-env-file} -p 8080:8080 {name-of-image}
 ```
 
@@ -53,6 +53,20 @@ The broker should start up and print some logs in the terminal window. To stop i
 If you are trying to discover the app that is using the ports and you cannot find it, it may be because some of the ports the broker uses by default are in the ephemeral port range. On this range, apps and system services can freely use ports without reporting their usage. If this is the case, you can likely fix the issue by restarting your computer. If that is impossible and you cannot change the ports in the configuration file, you'll have to explore alternative solutions.
 
 You can verify that the broker is running by accessing http://localhost:8161 in a web browser. After logging in with default credentials `username: admin` and `password: admin`, you should see a simple page showing "Welcome to the Apache ActiveMQ!".
+
+### Username and password authentication
+
+The ActiveMQ broker in AWS requires a username and password, while the default broker you get locally does not. This does not cause any problems as long as the app is correctly configured to use a username and password. If you want your local broker to also require a username and password, add the following code to `{path-to-broker}/conf/activemq.xml` in between the `<broker>` and `</broker>` tags. Substitue `{username}` and `{password}` with the desired username and password, respectively.
+
+```xml
+<plugins>
+    <simpleAuthenticationPlugin anonymousAccessAllowed="false">
+        <users>
+            <authenticationUser username="{username}" password="{password}" groups="users,admins"/>
+        </users>
+    </simpleAuthenticationPlugin>
+</plugins>
+```
 
 ## Code Organization
 

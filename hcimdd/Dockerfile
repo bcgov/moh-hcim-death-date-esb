@@ -1,15 +1,15 @@
 FROM maven:3.8.6-openjdk-11-slim as build-stage
 RUN mkdir -p /home/death_date
 
-COPY DeathDate-war /home/death_date/DeathDate-war
-COPY ESB-common /home/death_date/ESB-common
-COPY pom.xml /home/death_date
+COPY hcimdd/DeathDate-war /home/death_date/DeathDate-war
+COPY hcimdd/ESB-common /home/death_date/ESB-common
+COPY hcimdd/pom.xml /home/death_date
 
 # copying config files from local as these files now have env variables which can be substituted at runtime based on env file
 # once we test, other config folders will be for reference only if needed and we can rename local to generic name
-COPY config/local/deathEnvironmentSpecific.xml  /home/death_date/DeathDate-war/src/main/resources
-COPY config/local/logback.xml /home/death_date/DeathDate-war/src/main/resources
-COPY config/local/glassfish-resources.xml  /home/death_date/DeathDate-war/src/main/webapp/WEB-INF
+COPY hcimdd/config/local/deathEnvironmentSpecific.xml  /home/death_date/DeathDate-war/src/main/resources
+COPY hcimdd/config/local/logback.xml /home/death_date/DeathDate-war/src/main/resources
+COPY hcimdd/config/local/glassfish-resources.xml  /home/death_date/DeathDate-war/src/main/webapp/WEB-INF
 
 # copying the key files directly is possible in a local configuration, but not in a github workflow
 #COPY config/local/deathDevTest.openssh /home/death_date/DeathDate-war/src/main/resources
@@ -35,8 +35,8 @@ COPY --from=build-stage /home/death_date/DeathDate-war/target/Death*.war $DEPLOY
 
 # HOME_DIR points to /opt/payara
 RUN mkdir -p $HOME_DIR/app-libs
-COPY postgresql-42.4.0.jar $HOME_DIR/app-libs
-COPY jce-jdk12-120.jar $HOME_DIR/app-libs
+COPY hcimdd/postgresql-42.4.0.jar $HOME_DIR/app-libs
+COPY hcimdd/jce-jdk12-120.jar $HOME_DIR/app-libs
 
 # the cmd instruction does not take env variables like DEPLOY_DIR, so we need to hardcode their values
 # --nocluster option is nice to have as we don't want payara clustering and it will consume fewer resources

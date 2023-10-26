@@ -18,10 +18,10 @@ Prerequisites:
 
 Before building the app, also ensure that the lines in the Dockerfile for copying the certificates into the container reflect the way you are using it. If you are building locally and you have the files deathDevTest.openssh, keys.jks, and trust.jks in config/local, you can comment out the lines that copy the keys from build args and uncomment the lines that copy the files directly. The method using build args is meant for builds executed from a GitHub workflow since the certificates are stored in GitHub Secrets rather than files.
 
-To run the app in docker on a local machine, build the Docker image from the Dockerfile in this repo's root directory. Note the period for the path at the end of the command, and change it if necessary.
+To run the app in docker on a local machine, build the Docker image from this repo's root directory.
 
 ```bash
-docker build -t {name-of-image} .
+docker build -t {name-of-image} -f hcimdd/Dockerfile .
 ```
 
 Then run the Docker container and map it to port 8080. Make sure you have the correct environment variables in your .env file and that all of the passwords are correct.
@@ -38,9 +38,9 @@ The app is also configured to check the ftp server for files at times determined
 
 ## Database Setup
 
-To set up the application's database, run `deathdate_pg.sql` in a new Postgres database named `registries`. The script will create a user called "role_esb_death" and all of the tables and sequences required by the application. Then you need to add a password for the user; you can do this either with the psql command `\password role_esb_death`, or you can modify the `create user role_esb_death` line in `deathdate_pg.sql` to end with `password {password}`.
+To set up the application's database, run `deathdate_pg.sql` in a new Postgres database called `hcimdd`. The name of the database isn't referenced in code anywhere, only in the sql script and the environment variables. The script will create a user called "role_esb_death" and all of the tables and sequences required by the application. Then you need to add a password for the user; you can do this either with the psql command `\password role_esb_death`, or you can modify the `create user role_esb_death` line in `deathdate_pg.sql` to end with `password '{password}'`. You may need to restart the database in order for the password change to be reflected.
 
-You may need to restart the database in order for the password change to be reflected.
+During subsequent runs of this script, you will need to uncomment the five lines that revoke and drop the dependents of `role_esb_death`. Otherwise, the script will fail when it tries to delete the user.
 
 ## Setting Up an ActiveMQ Broker
 

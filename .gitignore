@@ -2,8 +2,8 @@
 *.openssh
 *.jks
 
-DeathDate-war/target
-ESB-common/target
+hcimdd/DeathDate-war/target
+hcimdd/ESB-common/target
 
 # Local .terraform directories
 **/.terraform/*

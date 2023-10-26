@@ -29,6 +29,8 @@
         <property name="userId" value="BatchDeath" />
         <property name="fileDropPath" value="${HCIM_FILE_DROP_PATH}" /> <!-- MUST include "/" at the end -->
         <property name="archivePath" value="${HCIM_FILE_ARCHIVE_PATH}" />
+        <property name="apiUrlPresignedS3" value="${ENV=API_URL_PRESIGNED_S3}" />
+        <property name="apiKeyPresignedS3" value="${ENV=API_KEY_PRESIGNED_S3}" />
         <property name="healthCheck" value="false" />
 	    <property name="jmsQueue" value="DeathDate-Broker" />
     </custom-resource>

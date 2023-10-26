@@ -33,6 +33,7 @@ generate "tfvars" {
   contents          = <<-EOF
     app_image  = "${local.app_image}"
     target_env = "${local.environment}"
+    project = "${local.project}"
     application = "deathdate"
 EOF
 }

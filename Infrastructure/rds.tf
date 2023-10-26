@@ -38,7 +38,6 @@ resource "aws_db_subnet_group" "deathdate_subnet_group" {
 
 module "postgres_rds" {
   source = "terraform-aws-modules/rds/aws"
-
   identifier           = "${var.application}-${var.target_env}-audit"
   major_engine_version = "13"
   family               = "postgres13"
@@ -47,7 +46,7 @@ module "postgres_rds" {
   instance_class       = "db.t3.micro"
   allocated_storage    = 5
 
-  db_name  = "${var.application}Audit"
+  db_name  = "${var.application}audit"
   username = var.deathdate_master_username
   password = random_password.deathdate_master_password.result
   port     = "5432"

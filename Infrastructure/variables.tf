@@ -7,9 +7,9 @@ variable "aws_region" {
   default     = "ca-central-1"
 }
 
-#variable "project" {
-#  description = "The AWS OCIO LicensePlate"
-#}
+variable "project" {
+  description = "The AWS OCIO LicensePlate"
+}
 
 variable "ecs_task_execution_role_name" {
   description = "ECS task execution role name"

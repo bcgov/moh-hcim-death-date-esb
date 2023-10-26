@@ -2,23 +2,25 @@
 -- Author: Arlo Watts
 -- Date: 26-Jun-2023
 
--- Prerequisites: a database called "registries"
+-- Prerequisites: a database called "hcimdd"
 
 create schema if not exists esbdeath;
 
+-- The below five lines must be included only for subsequent runs of this script
+-- revoke all on database hcimdd from role_esb_death;
+-- revoke all on schema esbdeath from role_esb_death;
+-- revoke all on all tables in schema esbdeath from role_esb_death;
+-- revoke all on all sequences in schema esbdeath from role_esb_death;
+-- drop owned by role_esb_death;
+
 -- Delete user
-revoke all on database registries from role_esb_death;
-revoke all on schema esbdeath from role_esb_death;
-revoke all on all tables in schema esbdeath from role_esb_death;
-revoke all on all sequences in schema esbdeath from role_esb_death;
-drop owned by role_esb_death;
 drop role if exists role_esb_death;
 
 -- Create the user role_esb_death
 create user role_esb_death;
 
 -- Set the schema in the search path for the user
-alter role role_esb_death in database registries set search_path to esbdeath;
+alter role role_esb_death in database hcimdd set search_path to esbdeath;
 
 -- Set the schema in the search path for the current session
 set search_path to esbdeath;
@@ -56,7 +58,7 @@ alter sequence xn_evnt_xn_evnt_id_seq owner to role_esb_death;
 alter sequence event_msg_event_msg_id_seq owner to role_esb_death;
 
 -- Grant permissions to the role
-grant connect on database registries to role_esb_death;
+grant connect on database hcimdd to role_esb_death;
 grant usage on schema esbdeath to role_esb_death;
 grant select, insert, update, delete on all tables in schema esbdeath to role_esb_death;
 grant select, update, usage on all sequences in schema esbdeath to role_esb_death;

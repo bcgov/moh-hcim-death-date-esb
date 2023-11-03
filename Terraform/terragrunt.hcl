@@ -46,9 +46,9 @@ provider "aws" {
   region  = var.aws_region
   default_tags {
     tags = {
-      Created By    = "Terraform"
-      Project       = "DeathDate"
-      Service Owner = "Mid-Tier"
+      "Created By"    = "Terraform"
+      "Project"       = "DeathDate"
+      "Service Owner" = "Mid-Tier"
     }
   }
 }

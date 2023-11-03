@@ -7,7 +7,8 @@ resource "aws_mq_broker" "deathdate_queue" {
   deployment_mode            = "SINGLE_INSTANCE"
   security_groups            = [data.aws_security_group.app.id, data.aws_security_group.data.id]
   #fix subnet id
-  subnet_ids = [data.aws_subnet.app["subnet-0896ff158c3ecdc53"].id]
+  #subnet_ids = [data.aws_subnet.app["subnet-0896ff158c3ecdc53"].id]
+  subnet_ids = [values(data.aws_subnet.app)[0].id]
   logs {
     audit   = true
     general = true

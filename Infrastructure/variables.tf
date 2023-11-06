@@ -85,10 +85,6 @@ variable "application" {
   description = "name of application being executed"
 }
 
-variable "alb_origin_id" {
-  description = "Domain name of OCIO Perimeter loadbalancer"
-}
-
 variable "fam_console_idp_name" {
   description = "Identifies which version of IDIR to use (DEV, TEST, or PROD)"
   type        = string

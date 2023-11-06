@@ -48,7 +48,7 @@ provider "aws" {
     tags = {
       "Created By"    = "Terraform"
       "Project"       = "DeathDate"
-      "Service Owner" = "Mid-Tier"
+      "Service Owner" = "Registries"
     }
   }
 }

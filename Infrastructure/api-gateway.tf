@@ -47,7 +47,7 @@ resource "aws_api_gateway_integration_response" "dd-filedrop-int-response" {
 }
 
 resource "aws_api_gateway_deployment" "dd-filedrop-api-deploy" {
-  depends_on  = [aws_api_gateway_method.dd-filedrop-method]
+  depends_on  = [aws_api_gateway_method.dd-filedrop-method, aws_api_gateway_integration.gis-integration]
   rest_api_id = aws_api_gateway_rest_api.dd-filedrop-api.id
 }
 

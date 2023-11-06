@@ -106,8 +106,6 @@ resource "aws_ecs_service" "main" {
   cluster         = aws_ecs_cluster.deathdate_cluster.arn
   task_definition = aws_ecs_task_definition.deathdate_td.arn
   desired_count   = 1
-  #Health Check need to go up?
-  health_check_grace_period_seconds = 60
   wait_for_steady_state             = false
   force_new_deployment              = true
 

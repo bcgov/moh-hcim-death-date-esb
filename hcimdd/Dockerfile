@@ -36,7 +36,6 @@ COPY --from=build-stage /home/death_date/DeathDate-war/target/Death*.war $DEPLOY
 # HOME_DIR points to /opt/payara
 RUN mkdir -p $HOME_DIR/app-libs
 COPY hcimdd/postgresql-42.4.0.jar $HOME_DIR/app-libs
-COPY hcimdd/jce-jdk12-120.jar $HOME_DIR/app-libs
 
 # the cmd instruction does not take env variables like DEPLOY_DIR, so we need to hardcode their values
 # --nocluster option is nice to have as we don't want payara clustering and it will consume fewer resources

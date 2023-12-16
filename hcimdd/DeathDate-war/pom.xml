@@ -90,12 +90,6 @@
             <artifactId>camel-bean-validator</artifactId>
             <version>${camel-version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ftp</artifactId>
-            <version>${camel-version}</version>
-        </dependency>
         
         <!-- Imported for access to System.out etc. in routes -->
         <dependency>
@@ -193,6 +187,11 @@
         </dependency>
         
         <!-- Imported to override JSch version -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-ftp</artifactId>
+            <version>${camel-jsch-version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jsch</artifactId>

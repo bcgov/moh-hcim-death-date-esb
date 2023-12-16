@@ -5,6 +5,7 @@ import ca.bc.gov.moh.death.processor.DeathDateFileArchiveProcessor;
 import ca.bc.gov.moh.death.processor.audit.DeathDateAuditProcessor;
 import ca.bc.gov.moh.death.processor.audit.DeathDateFileDropProcessor;
 import ca.bc.gov.moh.death.transaction.RevisePerson;
+import com.jcraft.jsch.JSch;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.LoggingLevel;
@@ -170,6 +171,10 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
 
         DataFormat bindy = new BindyFixedLengthDataFormat(BatchFile.class);
         DataFormat jaxb = new JaxbDataFormat("org.hl7.v3");
+
+        // MoH SFTP server still proposes using ssh-rsa
+        JSch.setConfig("server_host_key", JSch.getConfig("server_host_key") + ",ssh-rsa");
+        JSch.setConfig("PubkeyAcceptedAlgorithms", JSch.getConfig("PubkeyAcceptedAlgorithms") + ",ssh-rsa");
 
         String fromFtp = "sftp:" + ftpUri + ":" + ftpPort + filePath
                 + "?autoCreate=" + autocreateFolders

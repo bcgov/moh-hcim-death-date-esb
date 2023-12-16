@@ -27,7 +27,7 @@ RUN echo $SSL_TRUST_BASE64 | base64 -d > /home/death_date/DeathDate-war/src/main
 RUN chmod 640 /home/death_date/DeathDate-war/src/main/resources/deathDevTest.openssh /home/death_date/DeathDate-war/src/main/resources/keys.jks /home/death_date/DeathDate-war/src/main/resources/trust.jks
 
 # build the project with maven
-RUN mvn -f /home/death_date/pom.xml clean package -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.insecure=true
+RUN mvn -f /home/death_date/pom.xml clean package
 
 # load payara micro
 FROM payara/micro:5.2022.5-jdk11

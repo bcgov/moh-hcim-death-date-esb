@@ -21,7 +21,8 @@
         <cxf-version>4.0.2</cxf-version>
         <spring-version>4.2.1.RELEASE</spring-version>
         <camel-version>2.17.7</camel-version>
-        <camel-activemq_version>5.16.5</camel-activemq_version>
+        <camel-activemq-version>5.16.5</camel-activemq-version>
+        <camel-jsch-version>3.17.0</camel-jsch-version>
         <version.payara.micro>5.2022.5</version.payara.micro>
     </properties>
     
@@ -188,7 +189,14 @@
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-camel</artifactId>
-            <version>${camel-activemq_version}</version>
+            <version>${camel-activemq-version}</version>
+        </dependency>
+        
+        <!-- Imported to override JSch version -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jsch</artifactId>
+            <version>${camel-jsch-version}</version>
         </dependency>
         
         <!-- Junit for test-->

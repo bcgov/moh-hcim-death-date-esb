@@ -189,13 +189,19 @@
         <!-- Imported to override JSch version -->
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-ftp</artifactId>
+            <artifactId>camel-jsch</artifactId>
             <version>${camel-jsch-version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jsch</artifactId>
-            <version>${camel-jsch-version}</version>
+            <artifactId>camel-ftp</artifactId>
+            <version>${camel-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.jcraft</groupId>
+                    <artifactId>jsch</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <!-- Junit for test-->

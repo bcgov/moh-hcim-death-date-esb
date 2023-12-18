@@ -29,7 +29,6 @@ import static ca.bc.gov.moh.death.service.BatchFile.RECORD_LENGTH;
 @Component
 public class InboundRouteBuilder extends SpringRouteBuilder {
 
-
     // ftpProperties and appProperties are kept for test cases. For main functionality the values are now inject using spring.
     protected Properties ftpProperties;
     protected Properties appProperties;
@@ -55,8 +54,8 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
     @Value("${ftpPrivateKey}")
     private String ftpPrivateKey;
 
-    @Value("${ftpPassword}")
-    private String ftpPassword;
+    @Value("${ftpPrivateKeyPassphrase}")
+    private String ftpPrivateKeyPassphrase;
 
     @Value("${ftpPort}")
     private String ftpPort;
@@ -94,7 +93,6 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
     private static final String ERROR = "ERROR";
 //    private static final String CLEAN_UP = "CLEAN_UP";
 
-
     // Static class Processor objects
     protected static Processor RETRY_EXCEPTION_PROCESSOR = new RetryExceptionProcessor();
     protected static Processor BATCH_FILE_PROCESSOR = new BatchFileProcessor();
@@ -121,7 +119,7 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
     protected static Processor AUDIT_HCIM_COMPLETE = new DeathDateAuditProcessor(COMPLETE, INFO);
 
     // Used by test classes to set the JMS queue URI to "direct:batchRecordQueue"
-    protected static String camelJMSComponentName ="jms:";  // used for jms uri
+    protected static String camelJMSComponentName = "jms:";  // used for jms uri
 
     public InboundRouteBuilder() {
     }
@@ -139,10 +137,8 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
         mapProperties();
     }
 
-
     /**
-     * Method used only for test cases. Once the test cases start using spring injection, this method can be
-     * removed.
+     * Method used only for test cases. Once the test cases start using spring injection, this method can be removed.
      */
     private void mapProperties() {
         hcimRevisePersonEndPointURI = appProperties.getProperty("hcimRevisePersonEndPointURI");
@@ -157,12 +153,11 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
 //        schedulerCleanUp = ftpProperties.getProperty("scheduler.cleanup");
         ftpUser = ftpProperties.getProperty("ftpUser");
         ftpPrivateKey = ftpProperties.getProperty("ftpPrivateKey");
-        ftpPassword = ftpProperties.getProperty("ftpPassword");
+        ftpPrivateKeyPassphrase = ftpProperties.getProperty("ftpPrivateKeyPassphrase");
         ftpPort = ftpProperties.getProperty("ftpPort");
         ftpUri = ftpProperties.getProperty("ftpUri");
-        jmsQueName=appProperties.getProperty("jmsQueName");
+        jmsQueName = appProperties.getProperty("jmsQueName");
     }
-
 
     @Override
     public void configure() throws Exception {
@@ -180,9 +175,8 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
                 + "?autoCreate=" + autocreateFolders
                 + "&move=" + moveToPath + "/${date:now:yyyyMMddHHmmssSSS}/${file:name}"//
                 + "&privateKeyUri=" + ftpPrivateKey
-                + "&privateKeyPassphrase=RAW(" + ftpPassword + ")"
+                + "&privateKeyPassphrase=RAW(" + ftpPrivateKeyPassphrase + ")"
                 + "&username=" + ftpUser
-                + "&password=" + ftpPassword
                 + "&runLoggingLevel=INFO"
                 + "&idempotent=true"
                 + "&idempotentKey=${file:path}-${file:size}"
@@ -194,9 +188,8 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
 //        String fromFtpCleanup = "sftp:" + ftpUri + ":" + ftpPort + filePath + moveToPath
 //                + "?delete=" + deleteAfterReading
 //                + "&privateKeyUri=" + ftpPrivateKey
-//                + "&privateKeyPassphrase=RAW(" + ftpPassword + ")"
+//                + "&privateKeyPassphrase=RAW(" + ftpPrivateKeyPassphrase + ")"
 //                + "&username=" + ftpUser
-//                + "&password=" + ftpPassword
 //                + "&idempotent=true&idempotentRepository=#jpaStore&inProgressRepository=#jpaStore"
 //                + "&scheduler=spring&scheduler.cron=" + schedulerCleanUp;
 
@@ -252,7 +245,6 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
                 .choice()
                 .when(header(JMS_CORRELATION_ID).isEqualTo(header(MAX_MESSAGE_NUMBER)))
                 .process(AUDIT_HCIM_COMPLETE);
-
 
 //            from(fromFtpCleanup)
 //                .routeId("ftp://cleanup")
@@ -400,7 +392,7 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             RevisePerson rp = exchange.getIn().getBody(RevisePerson.class);
-            exchange.getIn().setHeader(DeathDateAuditProcessor.MESSAGE_ID_HEADER_KEY,rp.getMessageId());
+            exchange.getIn().setHeader(DeathDateAuditProcessor.MESSAGE_ID_HEADER_KEY, rp.getMessageId());
         }
     }
 

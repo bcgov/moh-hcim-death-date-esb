@@ -32,7 +32,7 @@
         <property name="apiUrlPresignedS3" value="${ENV=API_URL_PRESIGNED_S3}" />
         <property name="apiKeyPresignedS3" value="${ENV=API_KEY_PRESIGNED_S3}" />
         <property name="healthCheck" value="false" />
-	    <property name="jmsQueue" value="DeathDate-Broker" />
+        <property name="jmsQueue" value="DeathDate-Broker" />
     </custom-resource>
     <custom-resource factory-class="org.glassfish.resources.custom.factory.PropertiesFactory" res-type="java.util.Properties" jndi-name="death/ftp_properties">
         <property name="deleteAfterReading" value="true" />
@@ -41,10 +41,10 @@
         <property name="moveToPath" value="Processed" />
         <property name="scheduler.cron" value="${SCHEDULER_CRON}" /> <!-- in PROD every day, but Sunday and Monday at 6am -->
         <property name="ftpUser" value="${FTP_USER}" />
-        <property name="ftpPassword" value="${FTP_PWD}" />
         <property name="ftpPort" value="22" />
         <property name="ftpUri" value="${FTP_HOST}" />
         <property name="ftpPrivateKey" value="${FTP_PRIVATE_KEY_NAME}" />
+        <property name="ftpPrivateKeyPassphrase" value="${FTP_PRIVATE_KEY_PASSPHRASE}" />
     </custom-resource>
     <custom-resource res-type="java.util.Properties" jndi-name="fileDropConfig" factory-class="org.glassfish.resources.custom.factory.PropertiesFactory">
         <property name="BatchDeath.RECEIVE" value="true"></property>

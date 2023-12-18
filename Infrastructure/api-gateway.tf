@@ -1,5 +1,8 @@
 resource "aws_api_gateway_rest_api" "dd-filedrop-api" {
   name = "${var.application}-${var.target_env}-esb-audit-file-drop-presigend-url-api"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
 resource "aws_api_gateway_resource" "dd-filedrop-gateway" {
@@ -44,14 +47,14 @@ resource "aws_api_gateway_integration_response" "dd-filedrop-int-response" {
 }
 
 resource "aws_api_gateway_deployment" "dd-filedrop-api-deploy" {
-  depends_on  = [aws_api_gateway_method.dd-filedrop-method]
+  depends_on  = [aws_api_gateway_method.dd-filedrop-method, aws_api_gateway_integration.gis-integration]
   rest_api_id = aws_api_gateway_rest_api.dd-filedrop-api.id
 }
 
 resource "aws_api_gateway_stage" "dd-filedrop-stage" {
   deployment_id = aws_api_gateway_deployment.dd-filedrop-api-deploy.id
   rest_api_id   = aws_api_gateway_rest_api.dd-filedrop-api.id
-  stage_name    = var.target_env
+  stage_name    = "default"
 }
 
 resource "aws_api_gateway_usage_plan" "dd-filedrop-usage-plan" {

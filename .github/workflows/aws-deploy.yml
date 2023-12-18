@@ -9,10 +9,6 @@ on:
         version:
          description: 'Version Number'
          required: false
-        zap_scan:
-         description: 'Run ZAP Scan'
-         type: boolean
-         required: false
 #   push:
 #     branches:
 #       - main
@@ -114,16 +110,3 @@ jobs:
           LICENSE_PLATE: ${{ secrets.MY_LICENSE_PLATE }}
         run: |
             terragrunt run-all apply --terragrunt-non-interactive
-  
-  zap_scan:
-    name: Zap Baseline Scan
-    if: inputs.zap_scan == true
-    environment: ${{ github.event.inputs.environment }}
-    runs-on: ubuntu-latest
-    permissions: write-all
-    needs: terraform_apply
-    steps:
-      - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.7.0
-        with:
-          target: ${{ vars.APPLICATION_URL }}

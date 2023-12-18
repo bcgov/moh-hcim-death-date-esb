@@ -20,9 +20,9 @@ ARG FTP_PRIVATE_KEY
 ARG SSL_KEY
 ARG SSL_TRUST
 
-RUN echo $FTP_PRIVATE_KEY | base64 -d > /home/death_date/DeathDate-war/src/main/resources/deathDevTest.openssh
-RUN echo $SSL_KEY | base64 -d > /home/death_date/DeathDate-war/src/main/resources/keys.jks
-RUN echo $SSL_TRUST | base64 -d > /home/death_date/DeathDate-war/src/main/resources/trust.jks
+RUN echo $FTP_PRIVATE_KEY_BASE64 | base64 -d > /home/death_date/DeathDate-war/src/main/resources/deathDevTest.openssh
+RUN echo $SSL_KEY_BASE64 | base64 -d > /home/death_date/DeathDate-war/src/main/resources/keys.jks
+RUN echo $SSL_TRUST_BASE64 | base64 -d > /home/death_date/DeathDate-war/src/main/resources/trust.jks
 
 RUN chmod 640 /home/death_date/DeathDate-war/src/main/resources/deathDevTest.openssh /home/death_date/DeathDate-war/src/main/resources/keys.jks /home/death_date/DeathDate-war/src/main/resources/trust.jks
 

@@ -83,7 +83,7 @@ resource "aws_ecs_task_definition" "deathdate_td" {
         { name = "CAMEL_LOG_LEVEL",
         value = "INFO" },
         { name = "SCHEDULER_CRON",
-        value = "0 * * * * *" },
+        value = "* */5 * * * *" },
         { name = "JVM_ARGS",
         value = "-Xms512m -Xmx756m" }
       ]
@@ -106,8 +106,6 @@ resource "aws_ecs_service" "main" {
   cluster         = aws_ecs_cluster.deathdate_cluster.arn
   task_definition = aws_ecs_task_definition.deathdate_td.arn
   desired_count   = 1
-  #Health Check need to go up?
-  health_check_grace_period_seconds = 60
   wait_for_steady_state             = false
   force_new_deployment              = true
 

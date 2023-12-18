@@ -11,6 +11,5 @@ generate "test_tfvars" {
   fargate_memory = 1024
   app_port = 8181
   fam_console_idp_name = "TEST-IDIR"
-  alb_origin_id = "deathdate.jy4drv-test.nimbus.cloud.gov.bc.ca"
   EOF
 }

@@ -174,7 +174,7 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
         String fromFtp = "sftp:" + ftpUri + ":" + ftpPort + filePath
                 + "?autoCreate=" + autocreateFolders
                 + "&move=" + moveToPath + "/${date:now:yyyyMMddHHmmssSSS}/${file:name}"//
-                + "&privateKeyUri=" + ftpPrivateKey
+                + "&privateKeyFile=" + ftpPrivateKey
                 + "&privateKeyPassphrase=RAW(" + ftpPrivateKeyPassphrase + ")"
                 + "&username=" + ftpUser
                 + "&runLoggingLevel=INFO"

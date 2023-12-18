@@ -3,7 +3,7 @@ package ca.bc.gov.moh.death.service;
 import java.io.IOException;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.support.DefaultExchange;
 import org.apache.cxf.helpers.IOUtils;
 import org.junit.Test;
 

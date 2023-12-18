@@ -8,6 +8,8 @@ import javax.persistence.Persistence;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.model.RouteDefinition;
+import org.apache.camel.model.rest.RestDefinition;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -47,9 +49,13 @@ public class HealthRoute extends SpringRouteBuilder {
 
         restConfiguration()
                 .component("servlet");
+        
+        RestDefinition restDefinition = rest("/health").get().produces(MediaType.APPLICATION_JSON_VALUE);
+        
+        RouteDefinition route = new RouteDefinition();
+        route.setRestDefinition(restDefinition);
 
-        rest("/health").get().produces(MediaType.APPLICATION_JSON_VALUE).route()
-                .routeId("health")
+        route.routeId("health")
                 .doTry()
                     .to("http4://" + hcimRevisePersonEndPointURI + "&bridgeEndpoint=true")
                     .setProperty("hcimEndpoint", simple("true"))
@@ -73,7 +79,7 @@ public class HealthRoute extends SpringRouteBuilder {
                         }
                         // Build JSON response
                         Boolean hcimEndpoint = exchange.getProperty("hcimEndpoint", Boolean.class);
-                        exchange.getOut().setBody(
+                        exchange.getMessage().setBody(
                                 String.format("{\"hcimEndpoint\": %s, \"database\": %s}", hcimEndpoint, database));
                     }
                 });

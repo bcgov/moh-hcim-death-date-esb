@@ -34,20 +34,20 @@
     </sslContextParameters>
 
     <context:component-scan base-package="ca.bc.gov.moh" />
-    <camelContext xmlns="http://camel.apache.org/schema/spring" handleFault="true" >
+    <camelContext trace="true" xmlns="http://camel.apache.org/schema/spring" >
         <contextScan />
-        <jmxAgent id="agent" createConnector="true" serviceUrlPath="deathdate-jmx"/>
+        <jmxAgent id="agent" />
     </camelContext>
 
     <!-- Dev environment configuration. Prevents the server from taking minutes to shutdown if messages are "stuck" -->
-    <bean id="shutdown" class="org.apache.camel.impl.DefaultShutdownStrategy"> 
+    <!-- <bean id="shutdown" class="org.apache.camel.impl.engine.DefaultShutdownStrategy"> 
         <property name="timeout" value="5"/>
-    </bean>
+    </bean> -->
 
-    <bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
+    <!-- <bean id="traceFormatter" class="org.apache.camel.Tracing">
         <property name="showBody" value="false"/>
         <property name="showHeaders" value="false"/>
-    </bean>
+    </bean> -->
 
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >

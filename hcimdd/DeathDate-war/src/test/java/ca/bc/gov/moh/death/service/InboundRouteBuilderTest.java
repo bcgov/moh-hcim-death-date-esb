@@ -7,9 +7,8 @@ import java.util.Objects;
 import java.util.Properties;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.builder.AdviceWithRouteBuilder;
+import org.apache.camel.builder.AdviceWith;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.commons.io.IOUtils;
@@ -90,32 +89,6 @@ public class InboundRouteBuilderTest extends CamelTestSupport {
      */
     @Before
     public void configureRoutes() throws Exception {
-        RouteDefinition fromFtp = context.getRouteDefinition("ftp://deathuser");
-        fromFtp.adviceWith(context, new AdviceWithRouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                replaceFromWith("direct:start");
-            }
-        });
-
-        RouteDefinition fromSubsub = context.getRouteDefinition("direct:sendMessage");
-        fromSubsub.adviceWith(context, new AdviceWithRouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                weaveByToUri("spring-ws:*").replace().to("mock:springws");
-            }
-        });
-
-        getMockEndpoint("mock:springws").whenAnyExchangeReceived(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setBody(validResponse);
-            }
-        });
-        
-        context.start();
-    }
-
     /**
      * Adds an empty PlatformTransactionManager implementation to the 
      * JndiRegistry. This is necessary, as the createRouteBuilder method above 
@@ -123,14 +96,8 @@ public class InboundRouteBuilderTest extends CamelTestSupport {
      * cannot be transactional. By overriding this implementation's methods with
      * empty equivalents, transaction functionality is disabled, allowing the 
      * route to include ".transacted()" without compromising the tests.
-     * 
-     * @return JndiRegistry
-     * @throws Exception 
      */
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry reg = super.createRegistry();
-        
+
         PlatformTransactionManager txMgr = new PlatformTransactionManager() {
             @Override
             public TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
@@ -145,9 +112,26 @@ public class InboundRouteBuilderTest extends CamelTestSupport {
             public void rollback(TransactionStatus status) throws TransactionException {
             }
         };
-        reg.bind("jmsTransactionManager", txMgr);
+        context.getRegistry().bind("jmsTransactionManager", txMgr);
+
+        RouteDefinition fromFtp = context.getRouteDefinition("ftp://deathuser");
+        AdviceWith.adviceWith(context, fromFtp.getId(), a -> {
+            a.replaceFromWith("direct:start");
+        });
+
+        RouteDefinition fromSubsub = context.getRouteDefinition("direct:sendMessage");
+        AdviceWith.adviceWith(context, fromSubsub.getId(), a -> {
+            a.weaveByToUri("spring-ws:*").replace().to("mock:springws");
+        });
+
+        getMockEndpoint("mock:springws").whenAnyExchangeReceived(new Processor() {
+            @Override
+            public void process(Exchange exchange) throws Exception {
+                exchange.getIn().setBody(validResponse);
+            }
+        });
         
-        return reg;
+        context.start();
     }
     
     @After

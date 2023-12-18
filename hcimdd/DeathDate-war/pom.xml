@@ -20,8 +20,7 @@
         <maven.compiler.release>11</maven.compiler.release>
         <cxf-version>4.0.2</cxf-version>
         <spring-version>4.2.1.RELEASE</spring-version>
-        <camel-version>2.17.7</camel-version>
-        <camel-activemq_version>5.16.5</camel-activemq_version>
+        <camel-version>3.17.0</camel-version>
         <version.payara.micro>5.2022.5</version.payara.micro>
     </properties>
     
@@ -56,6 +55,11 @@
             <artifactId>jaxws-rt</artifactId>
             <version>2.3.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-spring-boot-xml-starter</artifactId>
+            <version>${camel-version}</version>
+        </dependency>
        
         <!-- Imported because required by JpaMessageIdRepository -->
         <dependency>
@@ -74,7 +78,7 @@
         <!-- Imported because HealthRoute requires it -->
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http4</artifactId>
+            <artifactId>camel-http</artifactId>
             <version>${camel-version}</version>
         </dependency>
         <!-- Imported for SpringRouteBuilder -->
@@ -186,9 +190,9 @@
             <version>${camel-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-camel</artifactId>
-            <version>${camel-activemq_version}</version>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-activemq</artifactId>
+            <version>${camel-version}</version>
         </dependency>
         
         <!-- Junit for test-->

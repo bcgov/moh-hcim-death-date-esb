@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.jcraft.jsch.JSch;
+
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -166,7 +168,7 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         logger.info("Death Date Apache Camel route initializing.");
-        String jmsUri = camelJMSComponentName + jmsQueName;
+        String jmsUri = camelJMSComponentName + jmsQueName + "?connectionFactory=#batchRecordQueueFactoryProxy";
 
         DataFormat bindy = new BindyFixedLengthDataFormat(BatchFile.class);
         DataFormat jaxb = new JaxbDataFormat("org.hl7.v3");
@@ -224,10 +226,15 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
                 .unmarshal(bindy)
                 .process(AUDIT_START)
                 .split(body())
-                .setHeader(JMS_CORRELATION_ID, simple("${property.CamelSplitIndex}++"))
-                .setHeader(MAX_MESSAGE_NUMBER, simple("${property.CamelSplitSize}"))
+                .setHeader(JMS_CORRELATION_ID, simple("${exchangeProperty.CamelSplitIndex}++"))
+                .setHeader(MAX_MESSAGE_NUMBER, simple("${exchangeProperty.CamelSplitSize}"))
                 .to(ExchangePattern.InOnly, jmsUri)
                 .end();
+
+        // MoH SFTP server still proposes using ssh-rsa
+        // See https://camel.apache.org/components/4.0.x/sftp-component.html
+        JSch.setConfig("server_host_key", JSch.getConfig("server_host_key") + ",ssh-rsa");
+        JSch.setConfig("PubkeyAcceptedAlgorithms", JSch.getConfig("PubkeyAcceptedAlgorithms") + ",ssh-rsa");
 
         from(jmsUri)
                 .routeId("jms:deathAuditQueue")

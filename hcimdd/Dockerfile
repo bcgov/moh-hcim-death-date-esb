@@ -27,7 +27,7 @@ RUN echo $SSL_TRUST | base64 -d > /home/death_date/DeathDate-war/src/main/resour
 RUN chmod 640 /home/death_date/DeathDate-war/src/main/resources/deathDevTest.openssh /home/death_date/DeathDate-war/src/main/resources/keys.jks /home/death_date/DeathDate-war/src/main/resources/trust.jks
 
 # build the project with maven
-RUN mvn -f /home/death_date/pom.xml clean package -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.insecure=true
+RUN mvn -f /home/death_date/pom.xml clean package -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.insecure=true -DskipTests=true
 
 # load payara micro
 FROM payara/micro:5.2022.5-jdk11
@@ -36,6 +36,7 @@ COPY --from=build-stage /home/death_date/DeathDate-war/target/Death*.war $DEPLOY
 # HOME_DIR points to /opt/payara
 RUN mkdir -p $HOME_DIR/app-libs
 COPY hcimdd/postgresql-42.4.0.jar $HOME_DIR/app-libs
+COPY hcimdd/unboundid-ldapsdk-4.0.14.jar $HOME_DIR/app-libs
 
 # the cmd instruction does not take env variables like DEPLOY_DIR, so we need to hardcode their values
 # --nocluster option is nice to have as we don't want payara clustering and it will consume fewer resources

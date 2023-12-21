@@ -175,7 +175,7 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
                 + "?autoCreate=" + autocreateFolders
                 + "&move=" + moveToPath + "/${date:now:yyyyMMddHHmmssSSS}/${file:name}"//
                 + "&privateKeyFile=" + ftpPrivateKey
-//                + "&privateKeyPassphrase=RAW(" + ftpPrivateKeyPassphrase + ")"
+                + "&privateKeyPassphrase=RAW(" + ftpPrivateKeyPassphrase + ")"
                 + "&username=" + ftpUser
                 + "&runLoggingLevel=INFO"
                 + "&idempotent=true"

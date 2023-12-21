@@ -102,12 +102,12 @@ resource "aws_ecs_task_definition" "deathdate_td" {
 }
 
 resource "aws_ecs_service" "main" {
-  name            = "${var.application}-${var.target_env}-service"
-  cluster         = aws_ecs_cluster.deathdate_cluster.arn
-  task_definition = aws_ecs_task_definition.deathdate_td.arn
-  desired_count   = 1
-  wait_for_steady_state             = false
-  force_new_deployment              = true
+  name                  = "${var.application}-${var.target_env}-service"
+  cluster               = aws_ecs_cluster.deathdate_cluster.arn
+  task_definition       = aws_ecs_task_definition.deathdate_td.arn
+  desired_count         = 1
+  wait_for_steady_state = false
+  force_new_deployment  = true
 
   triggers = {
     redeployment = var.timestamp

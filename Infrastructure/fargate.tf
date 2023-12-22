@@ -62,8 +62,8 @@ resource "aws_ecs_task_definition" "deathdate_td" {
         valueFrom = "${aws_secretsmanager_secret_version.ftp_user.arn}" },
         { name = "FTP_FILE_PATH",
         valueFrom = "${aws_secretsmanager_secret_version.ftp_file_path.arn}" },
-        { name = "FTP_PWD",
-        valueFrom = "${aws_secretsmanager_secret_version.ftp_pwd.arn}" },
+        { name = "FTP_PRIVATE_KEY_PASSPHRASE",
+        valueFrom = "${aws_secretsmanager_secret_version.ftp_private_key_passphrase.arn}" },
         { name = "FTP_PRIVATE_KEY_NAME",
         valueFrom = "${aws_secretsmanager_secret_version.ftp_private_key_name.arn}" },
         { name = "JMS_BROKER_URL",
@@ -102,12 +102,12 @@ resource "aws_ecs_task_definition" "deathdate_td" {
 }
 
 resource "aws_ecs_service" "main" {
-  name            = "${var.application}-${var.target_env}-service"
-  cluster         = aws_ecs_cluster.deathdate_cluster.arn
-  task_definition = aws_ecs_task_definition.deathdate_td.arn
-  desired_count   = 1
-  wait_for_steady_state             = false
-  force_new_deployment              = true
+  name                  = "${var.application}-${var.target_env}-service"
+  cluster               = aws_ecs_cluster.deathdate_cluster.arn
+  task_definition       = aws_ecs_task_definition.deathdate_td.arn
+  desired_count         = 1
+  wait_for_steady_state = false
+  force_new_deployment  = true
 
   triggers = {
     redeployment = var.timestamp

@@ -41,8 +41,8 @@ resource "aws_secretsmanager_secret" "ftp_file_path" {
   name = "FTP_FILE_PATH"
 }
 
-resource "aws_secretsmanager_secret" "ftp_pwd" {
-  name = "FTP_PWD"
+resource "aws_secretsmanager_secret" "ftp_private_key_passphrase" {
+  name = "FTP_PRIVATE_KEY_PASSPHRASE"
 }
 
 resource "aws_secretsmanager_secret" "ftp_private_key_name" {
@@ -130,8 +130,8 @@ resource "aws_secretsmanager_secret_version" "ftp_file_path" {
   secret_id     = aws_secretsmanager_secret.ftp_file_path.id
   secret_string = "changeme"
 }
-resource "aws_secretsmanager_secret_version" "ftp_pwd" {
-  secret_id     = aws_secretsmanager_secret.ftp_pwd.id
+resource "aws_secretsmanager_secret_version" "ftp_private_key_passphrase" {
+  secret_id     = aws_secretsmanager_secret.ftp_private_key_passphrase.id
   secret_string = "changeme"
 }
 resource "aws_secretsmanager_secret_version" "ftp_private_key_name" {

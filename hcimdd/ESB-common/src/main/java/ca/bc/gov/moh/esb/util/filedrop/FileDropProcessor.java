@@ -17,6 +17,7 @@
  */
 package ca.bc.gov.moh.esb.util.filedrop;
 
+import ca.bc.gov.moh.esb.util.S3FileUploader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -68,6 +69,18 @@ public class FileDropProcessor {
             } catch (FileNotFoundException | TransformerException ex) {
                 Logger.getLogger(FileDropProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+    
+    public void dropS3File(String body, String messageType, String apiUrl, String apiKey) {
+
+        if (new FileDropConfiguration().isMessageToBeSaved(transactionType, messageType)) {
+
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(Calendar.getInstance().getTime());
+            String fileName = transactionId + "-" + timeStamp + "-" + messageType;
+
+            S3FileUploader s3FileUploader = new S3FileUploader(apiUrl, apiKey);
+            s3FileUploader.uploadFile(body, fileName);
         }
     }
     

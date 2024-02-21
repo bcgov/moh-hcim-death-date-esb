@@ -33,28 +33,29 @@ import org.apache.camel.Processor;
  * @author joshua.burton
  */
 public class DeathDateFileDropProcessor implements Processor {
-    
-    private String path;
+
+    private String apiUrl;
+    private String apiKey;
     private final String transactionType;
-    
     private String messageType;
-    
+
     public DeathDateFileDropProcessor() {
         Properties appProperties;
         try {
             appProperties = (Properties) new InitialContext().lookup("java:app/death/application_properties");
-            this.path = appProperties.getProperty("fileDropPath");
+            this.apiUrl = appProperties.getProperty("apiUrlPresignedS3");
+            this.apiKey = appProperties.getProperty("apiKeyPresignedS3");
         } catch (NamingException e) {
             Logger.getLogger(DeathDateFileDropProcessor.class.getName()).log(Level.SEVERE, null, e);
         }
         this.transactionType = "BatchDeath";
     }
-    
+
     public DeathDateFileDropProcessor(String messageType) {
         this();
         this.messageType = messageType;
     }
-    
+
     @Override
     public void process(Exchange exchange) {
         String messageTypeFileName;
@@ -64,11 +65,11 @@ public class DeathDateFileDropProcessor implements Processor {
         } else {
             messageTypeFileName = messageType;
         }
-        
+
         String transactionId = exchange.getIn().getHeader(TRANSACTION_ID_HEADER_KEY, String.class);
-        FileDropProcessor fdp = new FileDropProcessor(path, transactionType, transactionId);
-        
+        FileDropProcessor fdp = new FileDropProcessor("", transactionType, transactionId);
+
         String messageBody = exchange.getIn().getBody(String.class);
-        fdp.dropFile(messageBody, messageTypeFileName);
+        fdp.dropS3File(messageBody, messageTypeFileName, apiUrl, apiKey);
     }
 }

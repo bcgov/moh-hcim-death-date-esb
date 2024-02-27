@@ -11,6 +11,5 @@ generate "prod_tfvars" {
   fargate_memory = 1024
   app_port = 8181
   fam_console_idp_name = "PROD-IDIR"
-  alb_origin_id = "deathdate.jy4drv-prod.nimbus.cloud.gov.bc.ca"
   EOF
 }

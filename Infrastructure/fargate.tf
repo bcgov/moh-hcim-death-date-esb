@@ -83,7 +83,7 @@ resource "aws_ecs_task_definition" "deathdate_td" {
         { name = "CAMEL_LOG_LEVEL",
         value = "INFO" },
         { name = "SCHEDULER_CRON",
-        value = "* */5 * * * *" },
+        value = "0 0 6,12 * * *" },
         { name = "JVM_ARGS",
         value = "-Xms512m -Xmx756m" }
       ]

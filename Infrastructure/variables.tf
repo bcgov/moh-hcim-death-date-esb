@@ -78,7 +78,7 @@ variable "app_image" {
 
 variable "app_count" {
   description = "Number of docker containers to run"
-  default     = 1
+  default     = 0
 }
 
 variable "application" {

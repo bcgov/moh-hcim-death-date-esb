@@ -179,7 +179,7 @@ public class InboundRouteBuilder extends SpringRouteBuilder {
                 + "&username=" + ftpUser
                 + "&runLoggingLevel=INFO"
                 + "&idempotent=true"
-                + "&idempotentKey=${file:path}-${file:size}"
+                + "&idempotentKey=${file:path}-${file:size}-${file:modified}"
                 + "&idempotentRepository=#jpaStore"
                 + "&scheduler=spring&scheduler.cron=" + schedulerCron
                 + "&bridgeErrorHandler=true";

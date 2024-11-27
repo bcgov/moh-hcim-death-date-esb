@@ -75,15 +75,15 @@ resource "aws_ecs_task_definition" "deathdate_td" {
         { name = "JMS_BROKER_USERNAME",
         valueFrom = "${aws_secretsmanager_secret_version.jms_user.arn}" },
         { name = "JMS_BROKER_PASSWORD",
-        valueFrom = "${aws_secretsmanager_secret_version.jms_pass.arn}" }
+        valueFrom = "${aws_secretsmanager_secret_version.jms_pass.arn}" },
+        { name = "SCHEDULER_CRON",
+        valueFrom = "${aws_secretsmanager_secret_version.hcim_scheduler_cron.arn}" }
       ]
       environment = [
         { name = "APP_LOG_LEVEL",
         value = "ERROR" },
         { name = "CAMEL_LOG_LEVEL",
         value = "INFO" },
-        { name = "SCHEDULER_CRON",
-        value = "0 0 6,12 * * *" },
         { name = "JVM_ARGS",
         value = "-Xms512m -Xmx756m" }
       ]

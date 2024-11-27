@@ -42,7 +42,7 @@ module "postgres_rds" {
   major_engine_version = "13"
   family               = "postgres13"
   engine               = "postgres"
-  engine_version       = "13.13"
+  engine_version       = "13.15"
   instance_class       = "db.t3.micro"
   allocated_storage    = 5
 

@@ -28,6 +28,9 @@ resource "aws_secretsmanager_secret" "hcim_file_drop_path" {
 resource "aws_secretsmanager_secret" "hcim_file_archive_path" {
   name = "HCIM_FILE_ARCHIVE_PATH"
 }
+resource "aws_secretsmanager_secret" "hcim_scheduler_cron" {
+  name = "SCHEDULER_CRON"
+}
 
 resource "aws_secretsmanager_secret" "ftp_host" {
   name = "FTP_HOST"
@@ -85,6 +88,11 @@ EOF
 resource "aws_secretsmanager_secret_version" "hcim_rp_endpoint" {
   secret_id     = aws_secretsmanager_secret.hcim_rp_endpoint.id
   secret_string = "changeme"
+}
+
+resource "aws_secretsmanager_secret_version" "hcim_scheduler_cron" {
+  secret_id     = aws_secretsmanager_secret.hcim_scheduler_cron.id
+  secret_string = "0 0 */2 * * *"
 }
 
 resource "aws_secretsmanager_secret_version" "hcim_ssl_pwd" {

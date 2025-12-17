@@ -63,8 +63,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          no-cache: true
           file: hcimdd/Dockerfile
           push: true
           tags: ${{ env.IMAGE_ID }}:latest

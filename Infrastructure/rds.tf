@@ -38,6 +38,7 @@ resource "aws_db_subnet_group" "deathdate_subnet_group" {
 
 module "postgres_rds" {
   source               = "terraform-aws-modules/rds/aws"
+  version = "~> 6.0"
   identifier           = "${var.application}-${var.target_env}-audit"
   major_engine_version = "13"
   family               = "postgres13"

@@ -61,3 +61,35 @@ resource "aws_iam_role_policy_attachment" "secret_role" {
   policy_arn = aws_iam_policy.get_secret.arn
 
 }
+resource "aws_iam_role_policy_attachment" "ecs_execution_managed" {
+  role       = aws_iam_role.ecs_task_execution_role.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+resource "aws_iam_role_policy" "ecs_task_execution_cloudwatch_logs" {
+  name = "AllowCreateLogGroup"
+  role = aws_iam_role.ecs_task_execution_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "logs:CreateLogGroup"
+        Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/ecs/${var.application}:log-stream:*"
+      }
+    ]
+  })
+}
+resource "aws_iam_role_policy" "lambda_cloudwatch_logs" {
+  name = "AllowCreateLogGroup"
+  role = aws_iam_role.lambda_role.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "logs:CreateLogGroup"
+        Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:${aws_cloudwatch_log_group.hcim_lambda.name}:log-stream:*"
+      }
+    ]
+  })
+}

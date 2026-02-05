@@ -38,6 +38,10 @@ resource "aws_iam_policy" "iam_policy_for_lambda" {
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "attach_basic_execution_to_iam_role" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
 resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
   role       = aws_iam_role.lambda_role.name
   policy_arn = aws_iam_policy.iam_policy_for_lambda.arn
@@ -51,7 +55,7 @@ data "archive_file" "zip_the_python_code" {
 
 resource "aws_lambda_function" "terraform_lambda_func" {
   filename      = "${path.root}/hcim-pre-signed-key.zip"
-  function_name = "hcim-death-date-s3-lamdba-file-drop"
+  function_name = "hcim-death-date-s3-lambda-file-drop"
   role          = aws_iam_role.lambda_role.arn
   handler       = "hcim-pre-signed-key.lambda_handler"
   runtime       = "python3.11"
@@ -69,4 +73,9 @@ resource "aws_lambda_permission" "apigw" {
   function_name = aws_lambda_function.terraform_lambda_func.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.dd-filedrop-api.execution_arn}/*/*/hcim-death-date-esb-audit-file-drop-presigned-url"
+}
+
+resource "aws_cloudwatch_log_group" "hcim_lambda" {
+  name = "/aws/lambda/hcim-death-date-s3-lambda-file-drop"
+  retention_in_days = 30
 }

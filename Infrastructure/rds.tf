@@ -69,7 +69,7 @@ module "postgres_rds" {
 
   # DB subnet group
   create_db_subnet_group = true
-  subnet_ids             = data.aws_subnets.data.ids
+  subnet_ids             = aws_db_subnet_group.deathdate_subnet_group.subnet_ids
 
 
   # Database Deletion Protection

@@ -59,6 +59,7 @@ resource "aws_lambda_function" "terraform_lambda_func" {
   role          = aws_iam_role.lambda_role.arn
   handler       = "hcim-pre-signed-key.lambda_handler"
   runtime       = "python3.11"
+  timeout       = 30
   environment {
     variables = {
       s3bucket = "${aws_s3_bucket.deathdate-filedrops.id}"
